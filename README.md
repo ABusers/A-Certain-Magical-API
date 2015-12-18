@@ -1,1 +1,1 @@
-# A-Certain-Magical-Website
+# A-Certain-Magical-API
