@@ -217,3 +217,11 @@ def print_shows(show_list):
         title = show_list[item].title
         print item, ':', title, '- nid:', show_list[item].nid
 
+
+def print_eps(ep_list):
+    for item in range(0,len(ep_list)):
+        title = ep_list[item].title
+        ep_number = ep_list[item].episode_number
+        lang = ep_list[item].sub_dub
+        ep_id = ep_list[item].funimation_id
+        print ep_number,':',title,'-',lang,':',ep_id
