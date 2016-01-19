@@ -223,5 +223,5 @@ def print_eps(ep_list):
         title = ep_list[item].title
         ep_number = ep_list[item].episode_number
         lang = ep_list[item].sub_dub
-        ep_id = ep_list[item].funimation_id
-        print ep_number,':',title,'-',lang,':',ep_id
+        ep_url = stream_url(ep_list[item].funimation_id,qual(ep_list[item]))
+        print ep_number,':',title,'-',lang,':',ep_url
