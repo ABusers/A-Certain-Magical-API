@@ -24,7 +24,6 @@ else:
     config.close()
     sub_dub = 0
 
-
 base_url = 'http://wpc.8c48.edgecastcdn.net'
 bitrate = [2000, 3500, 4000]
 funimation_url = 'https://www.funimation.com/'
@@ -211,4 +210,10 @@ def get_shows():
     show_url = get_data_url('shows')
     shows = process_data(funimation_url + show_url)
     return shows
+
+
+def print_shows(show_list):
+    for item in range(0, len(show_list)):
+        title = show_list[item].title
+        print item, ':', title, '- nid:', show_list[item].nid
 
