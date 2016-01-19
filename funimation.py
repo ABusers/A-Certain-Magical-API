@@ -143,7 +143,7 @@ def process_data(url):
     return filter_response(data)
 
 
-def get_data(endpoint,series=0):
+def get_data_url(endpoint,series=0):
     if endpoint == 'shows':
         params = check_params(sort='alpha')
         url = urls[endpoint].format(**params)
@@ -200,3 +200,9 @@ def stream_url(video_id, quality):
 def qual(episode):
     q = len(episode.video_quality)-1
     return bitrate[q]
+
+
+def get_shows():
+    show_url = get_data_url('shows')
+    shows = process_data(funimation_url+show_url)
+    return shows
