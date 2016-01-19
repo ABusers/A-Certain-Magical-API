@@ -11,10 +11,10 @@ from models import *
 
 if path.exists('settings'):
     try:
-        config = open('settings','r')
+        config = open('settings', 'r')
         sub_dub = int(config.read())
     except:
-        config = open('settings','w')
+        config = open('settings', 'w')
         config.write('0')
         config.close()
         sub_dub = 0
@@ -34,14 +34,14 @@ genre_types = ['all', 'action', 'adventure', 'bishonen', 'bishoujo', 'comedy',
                'space', 'sports', 'super power', 'supernatural', 'yuri']
 
 urls = {
-    'details':  'mobile/node/{showid}',
-    'search':   'mobile/shows.json/alpha/asc/nl/all/all?keys={term}',
-    'shows':    'mobile/shows.json/{sort}/{order}/{limit}/{rating}/{genre}',
-    'clips':    'mobile/clips.json/sequence/{order}/{showid}/all/all?page={page}',
+    'details': 'mobile/node/{showid}',
+    'search': 'mobile/shows.json/alpha/asc/nl/all/all?keys={term}',
+    'shows': 'mobile/shows.json/{sort}/{order}/{limit}/{rating}/{genre}',
+    'clips': 'mobile/clips.json/sequence/{order}/{showid}/all/all?page={page}',
     'trailers': 'mobile/trailers.json/sequence/{order}/{showid}/all/all?page={page}',
-    'movies':   'mobile/movies.json/{v_type}/{sort}/{order}/all/{showid}?page={page}',
+    'movies': 'mobile/movies.json/{v_type}/{sort}/{order}/all/{showid}?page={page}',
     'episodes': 'mobile/episodes.json/{v_type}/sequence/{order}/all/{showid}?page={page}',
-    'stream':   'http://wpc.8c48.edgecastcdn.net/038C48/SV/480/{video_id}/{video_id}-480-{quality}K.mp4.m3u8?9b303b6c62204a9dcb5ce5f5c607',
+    'stream': 'http://wpc.8c48.edgecastcdn.net/038C48/SV/480/{video_id}/{video_id}-480-{quality}K.mp4.m3u8?9b303b6c62204a9dcb5ce5f5c607',
 }
 
 
@@ -143,7 +143,7 @@ def process_data(url):
     return filter_response(data)
 
 
-def get_data_url(endpoint,series=0):
+def get_data_url(endpoint, series=0):
     if endpoint == 'shows':
         params = check_params(sort='alpha')
         url = urls[endpoint].format(**params)
@@ -158,7 +158,6 @@ def get_data_url(endpoint,series=0):
 
 
 def check_params(showid=0, page=0, sort=None, order=None, limit=None, rating=None, genre=None, term=None):
-
     if sort is None or sort not in sort_types:
         sort = 'date'
 
@@ -188,21 +187,22 @@ def get(endpoint, params=None):
     if params is None:
         content = urllib2.urlopen(url).read()
     else:
-        content = urllib2.urlopen(url+urllib.urlencode(params)).read()
+        content = urllib2.urlopen(url + urllib.urlencode(params)).read()
     return json.loads(content)
 
 
 def stream_url(video_id, quality):
-        url = urls['stream'].format(**locals())
-        return url
+    url = urls['stream'].format(**locals())
+    return url
 
 
 def qual(episode):
-    q = len(episode.video_quality)-1
+    q = len(episode.video_quality) - 1
     return bitrate[q]
 
 
 def get_shows():
     show_url = get_data_url('shows')
-    shows = process_data(funimation_url+show_url)
+    shows = process_data(funimation_url + show_url)
     return shows
+
