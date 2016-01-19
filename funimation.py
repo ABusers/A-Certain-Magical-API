@@ -17,7 +17,8 @@ if path.exists('settings'):
         config = open('settings','w')
         config.write('0')
         config.close()
-        sub_dub=0
+        sub_dub = 0
+
 base_url = 'http://wpc.8c48.edgecastcdn.net'
 bitrate = [2000, 3500, 4000]
 funimation_url = 'https://www.funimation.com/'
@@ -192,9 +193,6 @@ def get(endpoint, params=None):
 
 
 def stream_url(video_id, quality):
-        base_url = 'http://wpc.8c48.edgecastcdn.net'
-        # this value doesn't seem to change
-        uid = '9b303b6c62204a9dcb5ce5f5c607'
         url = urls['stream'].format(**locals())
         return url
 
