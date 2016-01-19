@@ -18,6 +18,12 @@ if path.exists('settings'):
         config.write('0')
         config.close()
         sub_dub = 0
+else:
+    config = open('settings', 'w')
+    config.write('0')
+    config.close()
+    sub_dub = 0
+
 
 base_url = 'http://wpc.8c48.edgecastcdn.net'
 bitrate = [2000, 3500, 4000]
