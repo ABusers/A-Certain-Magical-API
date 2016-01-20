@@ -148,13 +148,13 @@ def process_data(url):
     return filter_response(data)
 
 
-def get_data_url(endpoint, series=0):
+def get_data_url(endpoint, series=0, pg=0):
     if endpoint == 'shows':
         params = check_params(sort='alpha')
         url = urls[endpoint].format(**params)
         return url
     if series != 0:
-        params = check_params(showid=series)
+        params = check_params(showid=series,page=pg)
         url = urls[endpoint].format(**params)
         return url
     params = check_params()
@@ -210,6 +210,18 @@ def get_shows():
     show_url = get_data_url('shows')
     shows = process_data(funimation_url + show_url)
     return shows
+
+
+# Strings episode pages together
+def get_episodes(show_id):
+    eplist = process_data(funimation_url+get_data_url('episodes',show_id))
+    for pgs in range(1,30):
+        url = funimation_url+get_data_url('episodes',show_id,pgs)
+        returns = get(url)
+        if returns:
+            eplist += process_data(funimation_url + get_data_url('episodes', show_id, pgs))
+        else:
+            return eplist
 
 
 def print_shows(show_list):
