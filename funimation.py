@@ -12,15 +12,16 @@ from models import *
 if path.exists('settings'):
     try:
         config = open('settings', 'r')
-        sub_dub = int(config.read())
+        settings = json.loads(config.read())
+        sub_dub = settings['sub_dub']
     except:
         config = open('settings', 'w')
-        config.write('0')
+        config.write(json.dumps({'sub_dub': 0},sort_keys=True,indent=4,separators=(',', ': ')))
         config.close()
         sub_dub = 0
 else:
     config = open('settings', 'w')
-    config.write('0')
+    config.write(json.dumps({'sub_dub': 0},sort_keys=True,indent=4,separators=(',', ': ')))
     config.close()
     sub_dub = 0
 
