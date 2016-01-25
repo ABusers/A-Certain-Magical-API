@@ -8,8 +8,8 @@ from time import strptime
 from models import *
 
 def dumps(dict):
-	json.dumps(dict,sort_keys=True,indent=4,separators=(',', ': '))
-
+	return gijson.dumps(dict,sort_keys=True,indent=4,separators=(',', ': '))
+	
 
 # sub and dub is 0=both 1=sub only 2=dub only
 
