@@ -9,18 +9,18 @@ from models import *
 
 # sub and dub is 0=both 1=sub only 2=dub only
 
-if path.exists('settings'):
+if path.exists('settings.json'):
     try:
-        config = open('settings', 'r')
+        config = open('settings.json', 'r')
         settings = json.loads(config.read())
         sub_dub = settings['sub_dub']
     except:
-        config = open('settings', 'w')
+        config = open('settings.json', 'w')
         config.write(json.dumps({'sub_dub': 0},sort_keys=True,indent=4,separators=(',', ': ')))
         config.close()
         sub_dub = 0
 else:
-    config = open('settings', 'w')
+    config = open('settings.json', 'w')
     config.write(json.dumps({'sub_dub': 0},sort_keys=True,indent=4,separators=(',', ': ')))
     config.close()
     sub_dub = 0
