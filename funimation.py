@@ -7,6 +7,10 @@ from time import strptime
 
 from models import *
 
+def dumps(dict):
+	json.dumps(dict,sort_keys=True,indent=4,separators=(',', ': '))
+
+
 # sub and dub is 0=both 1=sub only 2=dub only
 
 if path.exists('settings.json'):
@@ -16,12 +20,12 @@ if path.exists('settings.json'):
         sub_dub = settings['sub_dub']
     except:
         config = open('settings.json', 'w')
-        config.write(json.dumps({'sub_dub': 0},sort_keys=True,indent=4,separators=(',', ': ')))
+        config.write(dumps({'sub_dub': 0}))
         config.close()
         sub_dub = 0
 else:
     config = open('settings.json', 'w')
-    config.write(json.dumps({'sub_dub': 0},sort_keys=True,indent=4,separators=(',', ': ')))
+    config.write(dumps({'sub_dub': 0}))
     config.close()
     sub_dub = 0
 
