@@ -7,13 +7,15 @@ from time import strptime
 
 from models import *
 
-def dumps(dict):
-	return gijson.dumps(dict,sort_keys=True,indent=4,separators=(',', ': '))
-	
+
+def dumps(dictionary):
+    return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
+
 
 # sub and dub is 0=both 1=sub only 2=dub only
 
 if path.exists('settings.json'):
+    # noinspection PyBroadException
     try:
         config = open('settings.json', 'r')
         settings = json.loads(config.read())
@@ -111,17 +113,17 @@ def process_response(data):
     # fix up the values
     data = [convert_values(i) for i in data]
 
-    if data[0].has_key('group_title'):
+    if 'group_title' in data[0]:
         return [EpisodeDetail(**i) for i in data]
-    elif data[0].has_key('maturity_rating'):
+    elif 'maturity_rating' in data[0]:
         return [Show(**i) for i in data]
-    elif data[0].has_key('episode_number'):
+    elif 'episode_number' in data[0]:
         return [Episode(**i) for i in data]
-    elif data[0].has_key('tv_key_art'):
+    elif 'tv_key_art' in data[0]:
         return [Movie(**i) for i in data]
-    elif data[0].has_key('funimationid'):
+    elif 'funimationid' in data[0]:
         return [Clip(**i) for i in data]
-    elif data[0].has_key('is_mature'):
+    elif 'is_mature' in data[0]:
         return [Trailer(**i) for i in data]
     else:
         return data
@@ -159,7 +161,7 @@ def get_data_url(endpoint, series=0, pg=0):
         url = urls[endpoint].format(**params)
         return url
     if series != 0:
-        params = check_params(showid=series,page=pg)
+        params = check_params(showid=series, page=pg)
         url = urls[endpoint].format(**params)
         return url
     params = check_params()
@@ -219,9 +221,9 @@ def get_shows():
 
 # Strings episode pages together
 def get_episodes(show_id):
-    eplist = process_data(funimation_url+get_data_url('episodes',show_id))
-    for pgs in range(1,30):
-        url = funimation_url+get_data_url('episodes',show_id,pgs)
+    eplist = process_data(funimation_url + get_data_url('episodes', show_id))
+    for pgs in range(1, 30):
+        url = funimation_url + get_data_url('episodes', show_id, pgs)
         returns = get(url)
         if returns:
             eplist += process_data(funimation_url + get_data_url('episodes', show_id, pgs))
@@ -236,9 +238,9 @@ def print_shows(show_list):
 
 
 def print_eps(ep_list):
-    for item in range(0,len(ep_list)):
+    for item in range(0, len(ep_list)):
         title = ep_list[item].title
         ep_number = ep_list[item].episode_number
         lang = ep_list[item].sub_dub
-        ep_url = stream_url(ep_list[item].funimation_id,qual(ep_list[item]))
-        print ep_number,':',title,'-',lang,':',ep_url
+        ep_url = stream_url(ep_list[item].funimation_id, qual(ep_list[item]))
+        print ep_number, ':', title, '-', lang, ':', ep_url
