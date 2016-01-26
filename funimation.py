@@ -27,17 +27,20 @@ if path.exists('settings.json'):
         config = open('settings.json', 'r')
         Settings.json = json.loads(config.read())
         Settings.sub_dub = Settings.json['sub_dub']
-
+        Settings.caching = Settings.json['caching']
     except:
         config = open('settings.json', 'w')
-        config.write(dumps({'sub_dub': 0, 'cache': True}))
+        config.write(dumps({'sub_dub': 0, 'caching': False}))
         config.close()
         Settings.sub_dub = 0
+        Settings.caching = False
 else:
     config = open('settings.json', 'w')
-    config.write(dumps({'sub_dub': 0, 'cache': True}))
+    config.write(dumps({'sub_dub': 0, 'caching': False}))
     config.close()
     Settings.sub_dub = 0
+    Settings.caching = False
+
 
 base_url = 'http://wpc.8c48.edgecastcdn.net'
 bitrate = [2000, 3500, 4000]
