@@ -13,7 +13,7 @@ def dumps(dictionary):
 
 class Settings:
     def __init__(self):
-        self.sub_dub = 0
+        self.sub_dub = 'both'
         self.caching = False
         self.json = str
 
@@ -30,15 +30,15 @@ if path.exists('settings.json'):
         Settings.caching = Settings.json['caching']
     except:
         config = open('settings.json', 'w')
-        config.write(dumps({'sub_dub': 0, 'caching': False}))
+        config.write(dumps({'sub_dub': 'both', 'caching': False}))
         config.close()
-        Settings.sub_dub = 0
+        Settings.sub_dub = 'both'
         Settings.caching = False
 else:
     config = open('settings.json', 'w')
-    config.write(dumps({'sub_dub': 0, 'caching': False}))
+    config.write(dumps({'sub_dub': 'both', 'caching': False}))
     config.close()
-    Settings.sub_dub = 0
+    Settings.sub_dub = 'both'
     Settings.caching = False
 
 
@@ -145,14 +145,14 @@ def filter_response(data):
     if data[0].get('sub_dub') is None:
         return data
     # both
-    if Settings.sub_dub == 0:
+    if Settings.sub_dub == 'both':
         return data
     # sub
-    elif Settings.sub_dub == 1:
+    elif Settings.sub_dub == 'sub':
         ret = [ep for ep in data if ep.sub]
         return ret
     # dub
-    elif Settings.sub_dub == 2:
+    elif Settings.sub_dub == 'dub':
         ret = [ep for ep in data if ep.dub]
         return ret
     else:
