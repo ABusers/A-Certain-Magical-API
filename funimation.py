@@ -4,7 +4,6 @@ import urllib
 import urllib2
 from datetime import datetime
 from time import strptime
-
 from models import *
 
 
@@ -12,24 +11,33 @@ def dumps(dictionary):
     return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
 
 
+class Settings:
+    def __init__(self):
+        self.sub_dub = 0
+        self.caching = False
+        self.json = str
+
+
 # sub and dub is 0=both 1=sub only 2=dub only
+
 
 if path.exists('settings.json'):
     # noinspection PyBroadException
     try:
         config = open('settings.json', 'r')
-        settings = json.loads(config.read())
-        sub_dub = settings['sub_dub']
+        Settings.json = json.loads(config.read())
+        Settings.sub_dub = Settings.json['sub_dub']
+
     except:
         config = open('settings.json', 'w')
-        config.write(dumps({'sub_dub': 0}))
+        config.write(dumps({'sub_dub': 0, 'cache': True}))
         config.close()
-        sub_dub = 0
+        Settings.sub_dub = 0
 else:
     config = open('settings.json', 'w')
-    config.write(dumps({'sub_dub': 0}))
+    config.write(dumps({'sub_dub': 0, 'cache': True}))
     config.close()
-    sub_dub = 0
+    Settings.sub_dub = 0
 
 base_url = 'http://wpc.8c48.edgecastcdn.net'
 bitrate = [2000, 3500, 4000]
@@ -134,14 +142,14 @@ def filter_response(data):
     if data[0].get('sub_dub') is None:
         return data
     # both
-    if sub_dub == 0:
+    if Settings.sub_dub == 0:
         return data
     # sub
-    elif sub_dub == 1:
+    elif Settings.sub_dub == 1:
         ret = [ep for ep in data if ep.sub]
         return ret
     # dub
-    elif sub_dub == 2:
+    elif Settings.sub_dub == 2:
         ret = [ep for ep in data if ep.dub]
         return ret
     else:
