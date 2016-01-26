@@ -25,16 +25,35 @@ class Settings:
         self.sort_types = dict
         self.genre_types = dict
 
-
-
-# sub and dub is 0=both 1=sub only 2=dub only
-
-
-
+class api:
+    def __init__(self):
+        self.cdn_url = 'http://wpc.8c48.edgecastcdn.net'
+        self.bit_rate = [2000, 3500, 4000]
+        self.api_url = 'https://www.funimation.com/'
+        self.order_types = ['asc', 'desc']
+        self.rating_type = ['tvpg', 'tv14', 'tvma', 'nr', 'pg', 'pg13', 'r', 'all']
+        self.sort_types = ['alpha', 'date', 'dvd', 'now', 'soon', 'votes', 'episode',
+              'title', 'sequence']
+        self.genre_types = ['all', 'action', 'adventure', 'bishonen', 'bishoujo', 'comedy',
+               'cyberpunk', 'drama', 'fan service', 'fantasy', 'harem',
+               'historical', 'horror', 'live action', 'magical girl',
+               'martial arts', 'mecha', 'moe', 'mystery', 'reverse harem',
+               'romance', 'school', 'sci fi', 'shonen', 'slice of life',
+               'space', 'sports', 'super power', 'supernatural', 'yuri']
+        self.urls = {
+        'details': 'mobile/node/{showid}',
+        'search': 'mobile/shows.json/alpha/asc/nl/all/all?keys={term}',
+        'shows': 'mobile/shows.json/{sort}/{order}/{limit}/{rating}/{genre}',
+        'clips': 'mobile/clips.json/sequence/{order}/{showid}/all/all?page={page}',
+        'trailers': 'mobile/trailers.json/sequence/{order}/{showid}/all/all?page={page}',
+        'movies': 'mobile/movies.json/{v_type}/{sort}/{order}/all/{showid}?page={page}',
+        'episodes': 'mobile/episodes.json/{v_type}/sequence/{order}/all/{showid}?page={page}',
+        'stream': 'http://wpc.8c48.edgecastcdn.net/038C48/SV/480/{video_id}/{video_id}-480-{quality}K.mp4.m3u8?9b303b6c62204a9dcb5ce5f5c607',
+}
 
 
 cdn_url = 'http://wpc.8c48.edgecastcdn.net'
-bitrate = [2000, 3500, 4000]
+bit_rate = [2000, 3500, 4000]
 api_url = 'https://www.funimation.com/'
 order_types = ['asc', 'desc']
 rating_type = ['tvpg', 'tv14', 'tvma', 'nr', 'pg', 'pg13', 'r', 'all']
@@ -46,7 +65,6 @@ genre_types = ['all', 'action', 'adventure', 'bishonen', 'bishoujo', 'comedy',
                'martial arts', 'mecha', 'moe', 'mystery', 'reverse harem',
                'romance', 'school', 'sci fi', 'shonen', 'slice of life',
                'space', 'sports', 'super power', 'supernatural', 'yuri']
-
 urls = {
     'details': 'mobile/node/{showid}',
     'search': 'mobile/shows.json/alpha/asc/nl/all/all?keys={term}',
@@ -232,7 +250,7 @@ def stream_url(video_id, quality):
 
 def qual(episode):
     q = len(episode.video_quality) - 1
-    return bitrate[q]
+    return bit_rate[q]
 
 
 def get_shows():
