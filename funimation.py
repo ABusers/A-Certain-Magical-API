@@ -16,35 +16,26 @@ class Settings:
         self.sub_dub = 'both'
         self.caching = False
         self.json = str
+        self.urls = dict
+        self.bit_rate = list
+        self.cdn_url = str
+        self.api_url = str
+        self.order_types = dict
+        self.rating_type = dict
+        self.sort_types = dict
+        self.genre_types = dict
+
 
 
 # sub and dub is 0=both 1=sub only 2=dub only
 
 
-if path.exists('settings.json'):
-    # noinspection PyBroadException
-    try:
-        config = open('settings.json', 'r')
-        Settings.json = json.loads(config.read())
-        Settings.sub_dub = Settings.json['sub_dub']
-        Settings.caching = Settings.json['caching']
-    except:
-        config = open('settings.json', 'w')
-        config.write(dumps({'sub_dub': 'both', 'caching': False}))
-        config.close()
-        Settings.sub_dub = 'both'
-        Settings.caching = False
-else:
-    config = open('settings.json', 'w')
-    config.write(dumps({'sub_dub': 'both', 'caching': False}))
-    config.close()
-    Settings.sub_dub = 'both'
-    Settings.caching = False
 
 
-base_url = 'http://wpc.8c48.edgecastcdn.net'
+
+cdn_url = 'http://wpc.8c48.edgecastcdn.net'
 bitrate = [2000, 3500, 4000]
-funimation_url = 'https://www.funimation.com/'
+api_url = 'https://www.funimation.com/'
 order_types = ['asc', 'desc']
 rating_type = ['tvpg', 'tv14', 'tvma', 'nr', 'pg', 'pg13', 'r', 'all']
 sort_types = ['alpha', 'date', 'dvd', 'now', 'soon', 'votes', 'episode',
@@ -66,6 +57,26 @@ urls = {
     'episodes': 'mobile/episodes.json/{v_type}/sequence/{order}/all/{showid}?page={page}',
     'stream': 'http://wpc.8c48.edgecastcdn.net/038C48/SV/480/{video_id}/{video_id}-480-{quality}K.mp4.m3u8?9b303b6c62204a9dcb5ce5f5c607',
 }
+
+if path.exists('settings.json'):
+    # noinspection PyBroadException
+    try:
+        config = open('settings.json', 'r')
+        Settings.json = json.loads(config.read())
+        Settings.sub_dub = Settings.json['sub_dub']
+        Settings.caching = Settings.json['caching']
+    except:
+        config = open('settings.json', 'w')
+        config.write(dumps({'sub_dub': 'both', 'caching': False}))
+        config.close()
+        Settings.sub_dub = 'both'
+        Settings.caching = False
+else:
+    config = open('settings.json', 'w')
+    config.write(dumps({'sub_dub': 'both', 'caching': False}))
+    config.close()
+    Settings.sub_dub = 'both'
+    Settings.caching = False
 
 
 def fix_keys(d):
@@ -206,7 +217,7 @@ def get(endpoint, params=None):
     if endpoint.startswith('http'):
         url = endpoint
     else:
-        url = base_url.format(endpoint)
+        url = cdn_url.format(endpoint)
     if params is None:
         content = urllib2.urlopen(url).read()
     else:
@@ -226,18 +237,18 @@ def qual(episode):
 
 def get_shows():
     show_url = get_data_url('shows')
-    shows = process_data(funimation_url + show_url)
+    shows = process_data(api_url + show_url)
     return shows
 
 
 # Strings episode pages together
 def get_episodes(show_id):
-    eplist = process_data(funimation_url + get_data_url('episodes', show_id))
+    eplist = process_data(api_url + get_data_url('episodes', show_id))
     for pgs in range(1, 30):
-        url = funimation_url + get_data_url('episodes', show_id, pgs)
+        url = api_url + get_data_url('episodes', show_id, pgs)
         returns = get(url)
         if returns:
-            eplist += process_data(funimation_url + get_data_url('episodes', show_id, pgs))
+            eplist += process_data(api_url + get_data_url('episodes', show_id, pgs))
         else:
             return eplist
 
