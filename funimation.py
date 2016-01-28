@@ -26,28 +26,32 @@ class Settings:
         self.genre_types = dict
 
 
+class Api:
+    def __init__(self):
+        self.cdn_url = str
+        self.bit_rate = list
+        self.api_url = str
+        self.order_types = list
+        self.rating_type = list
+        self.sort_types = list
+        self.genre_types = list
+        self.urls = dict
 
-# sub and dub is 0=both 1=sub only 2=dub only
 
-
-
-
-
-cdn_url = 'http://wpc.8c48.edgecastcdn.net'
-bitrate = [2000, 3500, 4000]
-api_url = 'https://www.funimation.com/'
-order_types = ['asc', 'desc']
-rating_type = ['tvpg', 'tv14', 'tvma', 'nr', 'pg', 'pg13', 'r', 'all']
-sort_types = ['alpha', 'date', 'dvd', 'now', 'soon', 'votes', 'episode',
-              'title', 'sequence']
-genre_types = ['all', 'action', 'adventure', 'bishonen', 'bishoujo', 'comedy',
-               'cyberpunk', 'drama', 'fan service', 'fantasy', 'harem',
-               'historical', 'horror', 'live action', 'magical girl',
-               'martial arts', 'mecha', 'moe', 'mystery', 'reverse harem',
-               'romance', 'school', 'sci fi', 'shonen', 'slice of life',
-               'space', 'sports', 'super power', 'supernatural', 'yuri']
-
-urls = {
+Api.cdn_url = 'http://wpc.8c48.edgecastcdn.net'
+Api.bit_rate = [2000, 3500, 4000]
+Api.api_url = 'https://www.funimation.com/'
+Api.order_types = ['asc', 'desc']
+Api.rating_type = ['tvpg', 'tv14', 'tvma', 'nr', 'pg', 'pg13', 'r', 'all']
+Api.sort_types = ['alpha', 'date', 'dvd', 'now', 'soon', 'votes', 'episode',
+                  'title', 'sequence']
+Api.genre_types = ['all', 'action', 'adventure', 'bishonen', 'bishoujo', 'comedy',
+                   'cyberpunk', 'drama', 'fan service', 'fantasy', 'harem',
+                   'historical', 'horror', 'live action', 'magical girl',
+                   'martial arts', 'mecha', 'moe', 'mystery', 'reverse harem',
+                   'romance', 'school', 'sci fi', 'shonen', 'slice of life',
+                   'space', 'sports', 'super power', 'supernatural', 'yuri']
+Api.urls = {
     'details': 'mobile/node/{showid}',
     'search': 'mobile/shows.json/alpha/asc/nl/all/all?keys={term}',
     'shows': 'mobile/shows.json/{sort}/{order}/{limit}/{rating}/{genre}',
@@ -180,31 +184,31 @@ def process_data(url):
 def get_data_url(endpoint, series=0, pg=0):
     if endpoint == 'shows':
         params = check_params(sort='alpha')
-        url = urls[endpoint].format(**params)
+        url = Api.urls[endpoint].format(**params)
         return url
     if series != 0:
         params = check_params(showid=series, page=pg)
-        url = urls[endpoint].format(**params)
+        url = Api.urls[endpoint].format(**params)
         return url
     params = check_params()
-    url = urls[endpoint].format(**params)
+    url = Api.urls[endpoint].format(**params)
     return url
 
 
 def check_params(showid=0, page=0, sort=None, order=None, limit=None, rating=None, genre=None, term=None):
-    if sort is None or sort not in sort_types:
+    if sort is None or sort not in Api.sort_types:
         sort = 'date'
 
-    if order is None or order not in order_types:
+    if order is None or order not in Api.order_types:
         order = 'asc'
 
     if limit is None or not limit.isdigit():
         limit = 'nl'  # no limit
 
-    if rating is None or rating not in rating_type:
+    if rating is None or rating not in Api.rating_type:
         rating = 'all'
 
-    if genre is None or genre not in genre_types:
+    if genre is None or genre not in Api.genre_types:
         genre = 'all'
 
     if term is None:
@@ -217,7 +221,7 @@ def get(endpoint, params=None):
     if endpoint.startswith('http'):
         url = endpoint
     else:
-        url = cdn_url.format(endpoint)
+        url = Api.cdn_url.format(endpoint)
     if params is None:
         content = urllib2.urlopen(url).read()
     else:
@@ -226,29 +230,29 @@ def get(endpoint, params=None):
 
 
 def stream_url(video_id, quality):
-    url = urls['stream'].format(**locals())
+    url = Api.urls['stream'].format(**locals())
     return url
 
 
 def qual(episode):
     q = len(episode.video_quality) - 1
-    return bitrate[q]
+    return Api.bit_rate[q]
 
 
 def get_shows():
     show_url = get_data_url('shows')
-    shows = process_data(api_url + show_url)
+    shows = process_data(Api.api_url + show_url)
     return shows
 
 
 # Strings episode pages together
 def get_episodes(show_id):
-    eplist = process_data(api_url + get_data_url('episodes', show_id))
+    eplist = process_data(Api.api_url + get_data_url('episodes', show_id))
     for pgs in range(1, 30):
-        url = api_url + get_data_url('episodes', show_id, pgs)
+        url = Api.api_url + get_data_url('episodes', show_id, pgs)
         returns = get(url)
         if returns:
-            eplist += process_data(api_url + get_data_url('episodes', show_id, pgs))
+            eplist += process_data(Api.api_url + get_data_url('episodes', show_id, pgs))
         else:
             return eplist
 
