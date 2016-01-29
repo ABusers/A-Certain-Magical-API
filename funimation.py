@@ -227,32 +227,68 @@ def get_shows():
     shows = process_data(Api.api_url + show_url)
     return shows
 
+class GetVideos():
+        # Strings episode pages together
+        @staticmethod
+        def episodes(show_id):
+            eplist = process_data(Api.api_url + get_data_url('episodes', show_id))
+            for pgs in range(1, 30):
+                url = Api.api_url + get_data_url('episodes', show_id, pgs)
+                returns = get(url)
+                if returns:
+                    eplist += process_data(Api.api_url + get_data_url('episodes', show_id, pgs))
+                else:
+                    return eplist
 
-# Strings episode pages together
-def get_episodes(show_id):
-    eplist = process_data(Api.api_url + get_data_url('episodes', show_id))
-    for pgs in range(1, 30):
-        url = Api.api_url + get_data_url('episodes', show_id, pgs)
-        returns = get(url)
-        if returns:
-            eplist += process_data(Api.api_url + get_data_url('episodes', show_id, pgs))
-        else:
-            return eplist
+
+        @staticmethod
+        def clips(show_id):
+            itemlist = process_data(Api.api_url + get_data_url('clips', show_id))
+            for pgs in range(1, 30):
+                url = Api.api_url + get_data_url('clips', show_id, pgs)
+                returns = get(url)
+                if returns:
+                    itemlist += process_data(Api.api_url + get_data_url('clips', show_id, pgs))
+                else:
+                    return itemlist
+                    
+                    
+        @staticmethod
+        def movies(show_id):
+            itemlist = process_data(Api.api_url + get_data_url('movies', show_id))
+            for pgs in range(1, 30):
+                url = Api.api_url + get_data_url('movies', show_id, pgs)
+                returns = get(url)
+                if returns:
+                    itemlist += process_data(Api.api_url + get_data_url('movies', show_id, pgs))
+                else:
+                    return itemlist
 
 
 def print_shows(show_list):
-    for item in range(0, len(show_list)):
-        title = show_list[item].title
-        print item, ':', title, '- nid:', show_list[item].nid
+    n = 0
+    for item in show_list:
+        title = item.title
+        print n, ':', title, '- nid:', item.nid
+        n += 1
 
 
-def print_eps(ep_list):
-    for item in range(0, len(ep_list)):
-        title = ep_list[item].title
-        ep_number = ep_list[item].episode_number
-        lang = ep_list[item].sub_dub
-        ep_url = stream_url(ep_list[item].funimation_id, qual(ep_list[item]))
-        print ep_number, ':', title, '-', lang, ':', ep_url
+def print_items(item_list):
+    for item in item_list:
+        if type(item) == Clip:
+            title = item.title
+            item_url = stream_url(item.funimation_id, item.quality)
+            print title,':',item_url
+        elif type(item) == Movie:
+            title = item.title
+            item_url = stream_url(item.funimation_id, item.quality)
+            print title,':',item_url
+        elif type(item) == Episode:
+            title = item.title
+            ep_number = item.episode_number
+            lang = item.sub_dub
+            item_url = stream_url(item.funimation_id, qual(item))
+            print ep_number, ':', title, '-', lang, ':', item_url
 
 
 def set_settings(sub_dub='both',caching=False):
@@ -262,3 +298,5 @@ def set_settings(sub_dub='both',caching=False):
     config = open('settings.json', 'w')
     config.write(dumps({'sub_dub': sub_dub, 'caching': caching}))
     config.close()
+    Settings.sub_dub=sub_dub
+    Settings.caching=caching
