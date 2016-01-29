@@ -265,6 +265,18 @@ class GetVideos():
                     return itemlist
 
 
+        @staticmethod
+        def trailers(show_id):
+            itemlist = process_data(Api.api_url + get_data_url('trailers', show_id))
+            for pgs in range(1, 30):
+                url = Api.api_url + get_data_url('trailers', show_id, pgs)
+                returns = get(url)
+                if returns:
+                    itemlist += process_data(Api.api_url + get_data_url('trailers', show_id, pgs))
+                else:
+                    return itemlist
+
+
 def print_shows(show_list):
     n = 0
     for item in show_list:
@@ -289,7 +301,10 @@ def print_items(item_list):
             lang = item.sub_dub
             item_url = stream_url(item.funimation_id, qual(item))
             print ep_number, ':', title, '-', lang, ':', item_url
-
+        else:
+            title = item.title
+            item_url = stream_url(item.funimation_id, qual(item))
+            print  title, ':', item_url
 
 def set_settings(sub_dub='both',caching=False):
     if sub_dub not in {'both','sub','dub'}:
