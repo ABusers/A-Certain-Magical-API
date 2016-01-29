@@ -283,7 +283,7 @@ def print_videos(item_list):
         elif type(item) == Movie:
             title = item.title
             item_url = stream_url(item.funimation_id, item.quality)
-            print title,':',item_url
+            print title,'-',item.sub_dub,':',item_url
         elif type(item) == Episode:
             title = item.title
             ep_number = item.episode_number
