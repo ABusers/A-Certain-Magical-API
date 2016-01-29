@@ -262,3 +262,12 @@ def print_eps(ep_list):
         lang = ep_list[item].sub_dub
         ep_url = stream_url(ep_list[item].funimation_id, qual(ep_list[item]))
         print ep_number, ':', title, '-', lang, ':', ep_url
+
+
+def set_settings(sub_dub='both',caching=False):
+    if sub_dub not in {'both','sub','dub'}:
+        print 'Invalid sub/dub setting'
+        return
+    config = open('settings.json', 'w')
+    config.write(dumps({'sub_dub': sub_dub, 'caching': caching}))
+    config.close()

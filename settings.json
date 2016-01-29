@@ -1,4 +1,4 @@
 {
     "caching": false,
-    "sub_dub": "both"
+    "sub_dub": "dub"
 }
