@@ -227,54 +227,43 @@ def get_shows():
     shows = process_data(Api.api_url + show_url)
     return shows
 
-class GetVideos():
-        # Strings episode pages together
-        @staticmethod
-        def episodes(show_id):
-            eplist = process_data(Api.api_url + get_data_url('episodes', show_id))
-            for pgs in range(1, 30):
-                url = Api.api_url + get_data_url('episodes', show_id, pgs)
-                returns = get(url)
-                if returns:
-                    eplist += process_data(Api.api_url + get_data_url('episodes', show_id, pgs))
-                else:
-                    return eplist
-
-
-        @staticmethod
-        def clips(show_id):
-            itemlist = process_data(Api.api_url + get_data_url('clips', show_id))
-            for pgs in range(1, 30):
-                url = Api.api_url + get_data_url('clips', show_id, pgs)
-                returns = get(url)
-                if returns:
-                    itemlist += process_data(Api.api_url + get_data_url('clips', show_id, pgs))
-                else:
-                    return itemlist
-                    
-                    
-        @staticmethod
-        def movies(show_id):
-            itemlist = process_data(Api.api_url + get_data_url('movies', show_id))
-            for pgs in range(1, 30):
-                url = Api.api_url + get_data_url('movies', show_id, pgs)
-                returns = get(url)
-                if returns:
-                    itemlist += process_data(Api.api_url + get_data_url('movies', show_id, pgs))
-                else:
-                    return itemlist
-
-
-        @staticmethod
-        def trailers(show_id):
-            itemlist = process_data(Api.api_url + get_data_url('trailers', show_id))
-            for pgs in range(1, 30):
-                url = Api.api_url + get_data_url('trailers', show_id, pgs)
-                returns = get(url)
-                if returns:
-                    itemlist += process_data(Api.api_url + get_data_url('trailers', show_id, pgs))
-                else:
-                    return itemlist
+def get_videos(show_id,item_type='Episode'):
+    if item_type in ['Episode','episode','e']:
+        itemlist = process_data(Api.api_url + get_data_url('episodes', show_id))
+        for pgs in range(1, 30):
+            url = Api.api_url + get_data_url('episodes', show_id, pgs)
+            returns = get(url)
+            if returns:
+                itemlist += process_data(Api.api_url + get_data_url('episodes', show_id, pgs))
+            else:
+                return itemlist
+    elif item_type in ['Clips', 'clips', 'c']:
+        itemlist = process_data(Api.api_url + get_data_url('clips', show_id))
+        for pgs in range(1, 30):
+            url = Api.api_url + get_data_url('clips', show_id, pgs)
+            returns = get(url)
+            if returns:
+                itemlist += process_data(Api.api_url + get_data_url('clips', show_id, pgs))
+            else:
+                return itemlist
+    elif item_type in ['Moive', 'movie', 'm']:
+        itemlist = process_data(Api.api_url + get_data_url('movies', show_id))
+        for pgs in range(1, 30):
+            url = Api.api_url + get_data_url('movies', show_id, pgs)
+            returns = get(url)
+            if returns:
+                itemlist += process_data(Api.api_url + get_data_url('movies', show_id, pgs))
+            else:
+                return itemlist
+    elif item_type in ['Trailer', 'trailer', 't']:
+        itemlist = process_data(Api.api_url + get_data_url('trailers', show_id))
+        for pgs in range(1, 30):
+            url = Api.api_url + get_data_url('trailers', show_id, pgs)
+            returns = get(url)
+            if returns:
+                itemlist += process_data(Api.api_url + get_data_url('trailers', show_id, pgs))
+            else:
+                return itemlist
 
 
 def print_shows(show_list):
@@ -285,7 +274,7 @@ def print_shows(show_list):
         n += 1
 
 
-def print_items(item_list):
+def print_videos(item_list):
     for item in item_list:
         if type(item) == Clip:
             title = item.title
