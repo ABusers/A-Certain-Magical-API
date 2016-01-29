@@ -43,8 +43,6 @@ class Api:
 }
 
 
-
-
 if path.exists('settings.json'):
     # noinspection PyBroadException
     try:
@@ -227,43 +225,44 @@ def get_shows():
     shows = process_data(Api.api_url + show_url)
     return shows
 
+
 def get_videos(show_id,item_type='Episodes'):
     if item_type in ['Episodes','episodes','e']:
-        itemlist = process_data(Api.api_url + get_data_url('episodes', show_id))
+        item_list = process_data(Api.api_url + get_data_url('episodes', show_id))
         for pgs in range(1, 30):
             url = Api.api_url + get_data_url('episodes', show_id, pgs)
             returns = get(url)
             if returns:
-                itemlist += process_data(Api.api_url + get_data_url('episodes', show_id, pgs))
+                item_list += process_data(Api.api_url + get_data_url('episodes', show_id, pgs))
             else:
-                return itemlist
+                return item_list
     elif item_type in ['Clips', 'clips', 'c']:
-        itemlist = process_data(Api.api_url + get_data_url('clips', show_id))
+        item_list = process_data(Api.api_url + get_data_url('clips', show_id))
         for pgs in range(1, 30):
             url = Api.api_url + get_data_url('clips', show_id, pgs)
             returns = get(url)
             if returns:
-                itemlist += process_data(Api.api_url + get_data_url('clips', show_id, pgs))
+                item_list += process_data(Api.api_url + get_data_url('clips', show_id, pgs))
             else:
-                return itemlist
+                return item_list
     elif item_type in ['Movies', 'movies', 'm']:
-        itemlist = process_data(Api.api_url + get_data_url('movies', show_id))
+        item_list = process_data(Api.api_url + get_data_url('movies', show_id))
         for pgs in range(1, 30):
             url = Api.api_url + get_data_url('movies', show_id, pgs)
             returns = get(url)
             if returns:
-                itemlist += process_data(Api.api_url + get_data_url('movies', show_id, pgs))
+                item_list += process_data(Api.api_url + get_data_url('movies', show_id, pgs))
             else:
-                return itemlist
+                return item_list
     elif item_type in ['Trailers', 'trailers', 't']:
-        itemlist = process_data(Api.api_url + get_data_url('trailers', show_id))
+        item_list = process_data(Api.api_url + get_data_url('trailers', show_id))
         for pgs in range(1, 30):
             url = Api.api_url + get_data_url('trailers', show_id, pgs)
             returns = get(url)
             if returns:
-                itemlist += process_data(Api.api_url + get_data_url('trailers', show_id, pgs))
+                item_list += process_data(Api.api_url + get_data_url('trailers', show_id, pgs))
             else:
-                return itemlist
+                return item_list
 
 
 def print_shows(show_list):
@@ -293,15 +292,15 @@ def print_videos(item_list):
         else:
             title = item.title
             item_url = stream_url(item.funimation_id, qual(item))
-            print  title, ':', item_url
+            print title, ':', item_url
 
 
 def set_settings(sub_dub='both',caching=False):
     if sub_dub not in {'both','sub','dub'}:
         print 'Invalid sub/dub setting'
         return
-    config = open('settings.json', 'w')
-    config.write(dumps({'sub_dub': sub_dub, 'caching': caching}))
-    config.close()
-    Settings.sub_dub=sub_dub
-    Settings.caching=caching
+    set_conf = open('settings.json', 'w')
+    set_conf.write(dumps({'sub_dub': sub_dub, 'caching': caching}))
+    set_conf.close()
+    Settings.sub_dub = sub_dub
+    Settings.caching = caching
