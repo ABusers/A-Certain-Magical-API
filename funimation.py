@@ -246,7 +246,7 @@ def get_videos(show_id,item_type='Episodes'):
                 itemlist += process_data(Api.api_url + get_data_url('clips', show_id, pgs))
             else:
                 return itemlist
-    elif item_type in ['Moives', 'movies', 'm']:
+    elif item_type in ['Movies', 'movies', 'm']:
         itemlist = process_data(Api.api_url + get_data_url('movies', show_id))
         for pgs in range(1, 30):
             url = Api.api_url + get_data_url('movies', show_id, pgs)
