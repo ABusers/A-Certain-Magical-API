@@ -16,14 +16,6 @@ class Settings:
         self.sub_dub = 'both'
         self.caching = False
         self.json = str
-        self.urls = dict
-        self.bit_rate = list
-        self.cdn_url = str
-        self.api_url = str
-        self.order_types = dict
-        self.rating_type = dict
-        self.sort_types = dict
-        self.genre_types = dict
 
 
 class Api:
