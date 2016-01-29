@@ -306,6 +306,7 @@ def print_items(item_list):
             item_url = stream_url(item.funimation_id, qual(item))
             print  title, ':', item_url
 
+
 def set_settings(sub_dub='both',caching=False):
     if sub_dub not in {'both','sub','dub'}:
         print 'Invalid sub/dub setting'
