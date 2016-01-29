@@ -227,8 +227,8 @@ def get_shows():
     shows = process_data(Api.api_url + show_url)
     return shows
 
-def get_videos(show_id,item_type='Episode'):
-    if item_type in ['Episode','episode','e']:
+def get_videos(show_id,item_type='Episodes'):
+    if item_type in ['Episodes','episodes','e']:
         itemlist = process_data(Api.api_url + get_data_url('episodes', show_id))
         for pgs in range(1, 30):
             url = Api.api_url + get_data_url('episodes', show_id, pgs)
@@ -246,7 +246,7 @@ def get_videos(show_id,item_type='Episode'):
                 itemlist += process_data(Api.api_url + get_data_url('clips', show_id, pgs))
             else:
                 return itemlist
-    elif item_type in ['Moive', 'movie', 'm']:
+    elif item_type in ['Moives', 'movies', 'm']:
         itemlist = process_data(Api.api_url + get_data_url('movies', show_id))
         for pgs in range(1, 30):
             url = Api.api_url + get_data_url('movies', show_id, pgs)
@@ -255,7 +255,7 @@ def get_videos(show_id,item_type='Episode'):
                 itemlist += process_data(Api.api_url + get_data_url('movies', show_id, pgs))
             else:
                 return itemlist
-    elif item_type in ['Trailer', 'trailer', 't']:
+    elif item_type in ['Trailers', 'trailers', 't']:
         itemlist = process_data(Api.api_url + get_data_url('trailers', show_id))
         for pgs in range(1, 30):
             url = Api.api_url + get_data_url('trailers', show_id, pgs)
