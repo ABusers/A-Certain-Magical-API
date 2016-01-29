@@ -12,38 +12,26 @@ def dumps(dictionary):
 
 
 class Settings:
-    def __init__(self):
-        self.sub_dub = 'both'
-        self.caching = False
-        self.json = str
+    sub_dub = 'both'
+    caching = False
+    json = str
 
 
 class Api:
-    def __init__(self):
-        self.cdn_url = str
-        self.bit_rate = list
-        self.api_url = str
-        self.order_types = list
-        self.rating_type = list
-        self.sort_types = list
-        self.genre_types = list
-        self.urls = dict
-
-
-Api.cdn_url = 'http://wpc.8c48.edgecastcdn.net'
-Api.bit_rate = [2000, 3500, 4000]
-Api.api_url = 'https://www.funimation.com/'
-Api.order_types = ['asc', 'desc']
-Api.rating_type = ['tvpg', 'tv14', 'tvma', 'nr', 'pg', 'pg13', 'r', 'all']
-Api.sort_types = ['alpha', 'date', 'dvd', 'now', 'soon', 'votes', 'episode',
+    cdn_url = 'http://wpc.8c48.edgecastcdn.net'
+    bit_rate = [2000, 3500, 4000]
+    api_url = 'https://www.funimation.com/'
+    order_types = ['asc', 'desc']
+    rating_type = ['tvpg', 'tv14', 'tvma', 'nr', 'pg', 'pg13', 'r', 'all']
+    sort_types = ['alpha', 'date', 'dvd', 'now', 'soon', 'votes', 'episode',
                   'title', 'sequence']
-Api.genre_types = ['all', 'action', 'adventure', 'bishonen', 'bishoujo', 'comedy',
+    genre_types = ['all', 'action', 'adventure', 'bishonen', 'bishoujo', 'comedy',
                    'cyberpunk', 'drama', 'fan service', 'fantasy', 'harem',
                    'historical', 'horror', 'live action', 'magical girl',
                    'martial arts', 'mecha', 'moe', 'mystery', 'reverse harem',
                    'romance', 'school', 'sci fi', 'shonen', 'slice of life',
                    'space', 'sports', 'super power', 'supernatural', 'yuri']
-Api.urls = {
+    urls = {
     'details': 'mobile/node/{showid}',
     'search': 'mobile/shows.json/alpha/asc/nl/all/all?keys={term}',
     'shows': 'mobile/shows.json/{sort}/{order}/{limit}/{rating}/{genre}',
@@ -53,6 +41,9 @@ Api.urls = {
     'episodes': 'mobile/episodes.json/{v_type}/sequence/{order}/all/{showid}?page={page}',
     'stream': 'http://wpc.8c48.edgecastcdn.net/038C48/SV/480/{video_id}/{video_id}-480-{quality}K.mp4.m3u8?9b303b6c62204a9dcb5ce5f5c607',
 }
+
+
+
 
 if path.exists('settings.json'):
     # noinspection PyBroadException
