@@ -3,6 +3,8 @@ import dialogs
 import os
 import sys
 import webbrowser
+import urlparse
+import json
 #import the funimation file
 ROOT_PATH = os.path.dirname(__file__)
 sys.path.append(os.path.join(ROOT_PATH, '..'))
@@ -10,14 +12,43 @@ sys.path.append(os.path.join(ROOT_PATH, '..'))
 import funimation as f
 import models as m
 
+def dumps(dictionary):
+    return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
+
+if os.path.exists('ios-settings.json'):
+    # noinspection PyBroadException
+    try:
+        config_ios = open('ios-settings.json', 'r')
+        jsonstr = json.load(config)
+        opener = jsonstr['opener']
+    except:
+        config_ios = open('ios-settings.json', 'w')
+        config_ios.write(dumps({'opener': 'Safari'}))
+        config_ios.close()
+        opener = 'Safari'
+else:
+    config = open('ios-settings.json', 'w')
+    config.write(dumps({'opener': 'Safari'}))
+    config.close()
+    opener = 'Safari'
+    
+openwith=[
+{'urlscheme': 'safari-http://','title': 'Safari'},
+{'urlscheme': 'nplayer-http://','title': 'nPlayer'},
+{'urlscheme': 'http://','title': 'Pythonista'},
+{'urlscheme': 'googlechrome://','title': 'Chrome'}]
+
+for i in openwith:
+    if opener == i['title']:
+        urlscheme = i['urlscheme']
+        break
 
 def showpicker():
-    slist=[]
-    n=0
+    slist=[{'title':'Settings'}]
     for i in f.get_shows():
-        slist += [{'title': str(n)+': '+i.title,'nid': i.nid,'content_types': i.video_section}]
-        n += 1
+        slist += [{'title': i.title,'nid': i.nid,'content_types': i.video_section}]
     return slist
+
 
 def videos_list(item_list):
     vlist=[]
@@ -37,10 +68,17 @@ def videos_list(item_list):
             vlist+=[{'title': i.title,'url': item_url}]
     return vlist
 
+
+
 choice = dialogs.list_dialog('shows',showpicker())
 if choice == None:
     sys.exit('Quit')
-
+if choice['title'] == 'Settings':
+    choice = dialogs.list_dialog('Open With',openwith)
+    config_ios = open('ios-settings.json', 'w')
+    config_ios.write(dumps({'opener': choice['title']}))
+    config_ios.close()
+    sys.exit('Settings changed')
 picked_type = dialogs.list_dialog('Type',choice['content_types'])
 if picked_type == None:
     sys.exit('Quit')
@@ -49,4 +87,6 @@ videos = videos_list(vtable)
 item = dialogs.list_dialog(choice['title'],videos)
 if item == None:
     sys.exit('Quit')
-webbrowser.open('safari-'+item['url'])
+url = urlparse.urlparse(item['url'])
+open_url=urlscheme+url.hostname+url.path+'?'+url.query
+webbrowser.open(open_url)
