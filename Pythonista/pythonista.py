@@ -33,7 +33,7 @@ def videos_list(item_list):
             ep_num = str(i.episode_number)
             vlist += [{'title': ep_num+' : '+i.title+'-'+i.sub_dub,'url': item_url}]
         else:
-            item_url = f.stream_url(item.funimation_id, f.qual(item))
+            item_url = f.stream_url(i.funimation_id, f.qual(i))
             vlist+=[{'title': i.title,'url': item_url}]
     return vlist
 
