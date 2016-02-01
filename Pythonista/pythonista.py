@@ -12,14 +12,15 @@ sys.path.append(os.path.join(ROOT_PATH, '..'))
 import funimation as f
 import models as m
 
+
+
 def dumps(dictionary):
     return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
 
 if os.path.exists('ios-settings.json'):
-    # noinspection PyBroadException
     try:
         config_ios = open('ios-settings.json', 'r')
-        jsonstr = json.load(config)
+        jsonstr = json.load(config_ios)
         opener = jsonstr['opener']
     except:
         config_ios = open('ios-settings.json', 'w')
