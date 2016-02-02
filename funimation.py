@@ -215,6 +215,7 @@ def get(endpoint, params=None):
         cache = open(cache_file,'w')
         cache.write(content)
         cache.close()
+        return json.loads(content)
     return json.loads(content)
 
 def caching(url):
@@ -223,17 +224,17 @@ def caching(url):
         cache_file = 'cache/'+cache_file.replace('/','`')+'.json'
         if os.path.exists(cache_file):
             last_modified = os.path.getmtime(cache_file)
-            if  (time.time()-last_modified)/86400<1:
-                try:
-                    data = json.loads(open(cache_file).read())
-                    print 'got from cache'
-                    return data
-                except:
-                    return get(url)
-            else:
+        else:
+            return get(url)
+        if  (time.time()-last_modified)/86400<1:
+            try:
+                data = json.loads(open(cache_file).read())
+                print 'got from cache'
+                return data
+            except:
                 return get(url)
         else:
-            get(url)
+            return get(url)
     else:
         get(url)
 
