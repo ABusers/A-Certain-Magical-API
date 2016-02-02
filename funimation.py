@@ -233,10 +233,11 @@ def caching(url):
             else:
                 return get(url)
         else:
-           return get(url)
+            get(url)
     else:
-        return get(url)
-           
+        get(url)
+
+
 def stream_url(video_id, quality):
     url = Api.urls['stream'].format(**locals())
     return url
