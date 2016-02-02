@@ -1,5 +1,5 @@
 import json
-import os.path as path
+import os
 import urllib
 import urllib2
 from datetime import datetime
@@ -43,7 +43,7 @@ class Api:
 }
 
 
-if path.exists('settings.json'):
+if os.path.exists('settings.json'):
     # noinspection PyBroadException
     try:
         config = open('settings.json', 'r')
@@ -63,7 +63,7 @@ else:
     Settings.sub_dub = 'both'
     Settings.caching = False
 
-
+ 
 def fix_keys(d):
     def fix_key(key):
         return key.lower().replace(' ', '_').replace('-', '_')
@@ -155,7 +155,9 @@ def filter_response(data):
         # just in case
         return data
 
-
+def caching(url):
+    if Settings.caching:
+        
 def process_data(url):
     resp = get(url)
     data = process_response(resp)
