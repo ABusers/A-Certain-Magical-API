@@ -1,3 +1,4 @@
 settings.json
 ios-settings.json
 cache*.*
+cache/
