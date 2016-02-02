@@ -5,7 +5,7 @@ import urllib2
 from datetime import datetime
 from time import strptime
 from models import *
-
+import time
 
 def dumps(dictionary):
     return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
@@ -155,11 +155,11 @@ def filter_response(data):
         # just in case
         return data
 
-def caching(url):
-    if Settings.caching:
+
+
         
 def process_data(url):
-    resp = get(url)
+    resp = caching(url)
     data = process_response(resp)
     return filter_response(data)
 
@@ -209,9 +209,34 @@ def get(endpoint, params=None):
         content = urllib2.urlopen(url).read()
     else:
         content = urllib2.urlopen(url + urllib.urlencode(params)).read()
+    if Settings.caching:
+        cache_file = url.replace(Api.api_url,'')
+        cache_file = 'cache/'+cache_file.replace('/','`')+'.json'
+        cache = open(cache_file,'w')
+        cache.write(content)
+        cache.close()
     return json.loads(content)
 
-
+def caching(url):
+    if Settings.caching:
+        cache_file = url.replace(Api.api_url,'')
+        cache_file = 'cache/'+cache_file.replace('/','`')+'.json'
+        if os.path.exists(cache_file):
+            last_modified = os.path.getmtime(cache_file)
+            if  (time.time()-last_modified)/86400<1:
+                try:
+                    data = json.loads(open(cache_file).read())
+                    print 'got from cache'
+                    return data
+                except:
+                    return get(url)
+            else:
+                return get(url)
+        else:
+           return get(url)
+    else:
+        return get(url)
+           
 def stream_url(video_id, quality):
     url = Api.urls['stream'].format(**locals())
     return url
