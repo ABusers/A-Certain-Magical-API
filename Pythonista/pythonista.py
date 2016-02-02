@@ -39,6 +39,8 @@ openwith=[
 {'urlscheme': 'http://','title': 'Pythonista'},
 {'urlscheme': 'googlechrome://','title': 'Chrome'}]
 
+os.chdir('..')
+
 for i in openwith:
     if opener == i['title']:
         urlscheme = i['urlscheme']
