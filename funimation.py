@@ -7,6 +7,7 @@ from time import strptime
 from models import *
 import time
 
+
 def dumps(dictionary):
     return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
 
@@ -32,15 +33,15 @@ class Api:
                    'romance', 'school', 'sci fi', 'shonen', 'slice of life',
                    'space', 'sports', 'super power', 'supernatural', 'yuri']
     urls = {
-    'details': 'mobile/node/{showid}',
-    'search': 'mobile/shows.json/alpha/asc/nl/all/all?keys={term}',
-    'shows': 'mobile/shows.json/{sort}/{order}/{limit}/{rating}/{genre}',
-    'clips': 'mobile/clips.json/sequence/{order}/{showid}/all/all?page={page}',
-    'trailers': 'mobile/trailers.json/sequence/{order}/{showid}/all/all?page={page}',
-    'movies': 'mobile/movies.json/{v_type}/{sort}/{order}/all/{showid}?page={page}',
-    'episodes': 'mobile/episodes.json/{v_type}/sequence/{order}/all/{showid}?page={page}',
-    'stream': 'http://wpc.8c48.edgecastcdn.net/038C48/SV/480/{video_id}/{video_id}-480-{quality}K.mp4.m3u8?9b303b6c62204a9dcb5ce5f5c607',
-}
+        'details': 'mobile/node/{showid}',
+        'search': 'mobile/shows.json/alpha/asc/nl/all/all?keys={term}',
+        'shows': 'mobile/shows.json/{sort}/{order}/{limit}/{rating}/{genre}',
+        'clips': 'mobile/clips.json/sequence/{order}/{showid}/all/all?page={page}',
+        'trailers': 'mobile/trailers.json/sequence/{order}/{showid}/all/all?page={page}',
+        'movies': 'mobile/movies.json/{v_type}/{sort}/{order}/all/{showid}?page={page}',
+        'episodes': 'mobile/episodes.json/{v_type}/sequence/{order}/all/{showid}?page={page}',
+        'stream': 'http://wpc.8c48.edgecastcdn.net/038C48/SV/480/{video_id}/{video_id}-480-{quality}K.mp4.m3u8?9b303b6c62204a9dcb5ce5f5c607',
+    }
 
 
 if os.path.exists('settings.json'):
@@ -63,7 +64,7 @@ else:
     Settings.sub_dub = 'both'
     Settings.caching = False
 
- 
+
 def fix_keys(d):
     def fix_key(key):
         return key.lower().replace(' ', '_').replace('-', '_')
@@ -156,10 +157,8 @@ def filter_response(data):
         return data
 
 
-
-        
 def process_data(url):
-    resp = caching(url)
+    resp = try_cache(url)
     data = process_response(resp)
     return filter_response(data)
 
@@ -210,20 +209,21 @@ def get(endpoint, params=None):
     else:
         content = urllib2.urlopen(url + urllib.urlencode(params)).read()
     if Settings.caching:
-        cache_file = url.replace(Api.api_url,'')
-        cache_file = 'cache/'+cache_file.replace('/','`')+'.json'
-        cache = open(cache_file,'w')
+        cache_file = url.replace(Api.api_url, '')
+        cache_file = 'cache/' + cache_file.replace('/', '`') + '.json'
+        cache = open(cache_file, 'w')
         cache.write(content)
         cache.close()
     return json.loads(content)
 
-def caching(url):
+
+def try_cache(url):
     if Settings.caching:
-        cache_file = url.replace(Api.api_url,'')
-        cache_file = 'cache/'+cache_file.replace('/','`')+'.json'
+        cache_file = url.replace(Api.api_url, '')
+        cache_file = 'cache/' + cache_file.replace('/', '`') + '.json'
         if os.path.exists(cache_file):
             last_modified = os.path.getmtime(cache_file)
-            if  (time.time()-last_modified)/86400<1:
+            if (time.time() - last_modified) / 86400 < 1:
                 try:
                     data = json.loads(open(cache_file).read())
                     print 'got from cache'
@@ -233,10 +233,11 @@ def caching(url):
             else:
                 return get(url)
         else:
-           return get(url)
+            return get(url)
     else:
         return get(url)
-           
+
+
 def stream_url(video_id, quality):
     url = Api.urls['stream'].format(**locals())
     return url
@@ -253,8 +254,8 @@ def get_shows():
     return shows
 
 
-def get_videos(show_id,item_type='Episodes'):
-    if item_type in ['Episodes','episodes','e']:
+def get_videos(show_id, item_type='Episodes'):
+    if item_type in ['Episodes', 'episodes', 'e']:
         item_list = process_data(Api.api_url + get_data_url('episodes', show_id))
         for pgs in range(1, 30):
             url = Api.api_url + get_data_url('episodes', show_id, pgs)
@@ -305,11 +306,11 @@ def print_videos(item_list):
         if type(item) == Clip:
             title = item.title
             item_url = stream_url(item.funimation_id, item.quality)
-            print title,':',item_url
+            print title, ':', item_url
         elif type(item) == Movie:
             title = item.title
             item_url = stream_url(item.funimation_id, item.quality)
-            print title,'-',item.sub_dub,':',item_url
+            print title, '-', item.sub_dub, ':', item_url
         elif type(item) == Episode:
             title = item.title
             ep_number = item.episode_number
@@ -322,8 +323,8 @@ def print_videos(item_list):
             print title, ':', item_url
 
 
-def set_settings(sub_dub='both',caching=False):
-    if sub_dub not in {'both','sub','dub'}:
+def set_settings(sub_dub='both', caching=False):
+    if sub_dub not in {'both', 'sub', 'dub'}:
         print 'Invalid sub/dub setting'
         return
     set_conf = open('settings.json', 'w')
