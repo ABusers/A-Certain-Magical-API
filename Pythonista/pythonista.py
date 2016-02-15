@@ -12,7 +12,7 @@ sys.path.append(os.path.join(ROOT_PATH, '..'))
 import funimation as f
 import models as m
 
-
+os.chdir('..')
 
 def dumps(dictionary):
     return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
@@ -39,7 +39,6 @@ openwith=[
 {'urlscheme': 'http://','title': 'Pythonista'},
 {'urlscheme': 'googlechrome://','title': 'Chrome'}]
 
-os.chdir('..')
 
 for i in openwith:
     if opener == i['title']:
