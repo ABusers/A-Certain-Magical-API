@@ -5,6 +5,7 @@ import sys
 import webbrowser
 import urlparse
 import json
+import clipboard
 #import the funimation file
 ROOT_PATH = os.path.dirname(__file__)
 sys.path.append(os.path.join(ROOT_PATH, '..'))
@@ -37,7 +38,8 @@ openwith=[
 {'urlscheme': 'safari-http://','title': 'Safari'},
 {'urlscheme': 'nplayer-http://','title': 'nPlayer'},
 {'urlscheme': 'http://','title': 'Pythonista'},
-{'urlscheme': 'googlechrome://','title': 'Chrome'}]
+{'urlscheme': 'googlechrome://','title': 'Chrome'},
+{'urlscheme': 'clipboard','title': 'Clipboard'}]
 
 
 for i in openwith:
@@ -46,7 +48,7 @@ for i in openwith:
         break
 
 def showpicker():
-    slist=[{'title':'Settings'}]
+    slist=[{'title':'Opener'}]
     for i in f.get_shows():
         slist += [{'title': i.title,'nid': i.nid,'content_types': i.video_section}]
     return slist
@@ -75,7 +77,7 @@ def videos_list(item_list):
 choice = dialogs.list_dialog('shows',showpicker())
 if choice == None:
     sys.exit('Quit')
-if choice['title'] == 'Settings':
+if choice['title'] == 'Opener':
     choice = dialogs.list_dialog('Open With',openwith)
     config_ios = open('ios-settings.json', 'w')
     config_ios.write(dumps({'opener': choice['title']}))
@@ -90,5 +92,8 @@ item = dialogs.list_dialog(choice['title'],videos)
 if item == None:
     sys.exit('Quit')
 url = urlparse.urlparse(item['url'])
-open_url=urlscheme+url.hostname+url.path+'?'+url.query
-webbrowser.open(open_url)
+if urlscheme == 'clipboard':
+    clipboard.set(item['url'])
+else:
+    open_url=urlscheme+url.hostname+url.path+'?'+url.query
+    webbrowser.open(open_url)
