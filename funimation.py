@@ -219,6 +219,8 @@ def get(endpoint, params=None):
 
 def try_cache(url):
     if Settings.caching:
+        if os.path.exists('cache/') == False:
+            os.mkdir('cache')
         cache_file = url.replace(Api.api_url, '')
         cache_file = 'cache/' + cache_file.replace('/', '`') + '.json'
         if os.path.exists(cache_file):
