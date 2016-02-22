@@ -1,7 +1,6 @@
 import json
 import os
-import urllib
-import urllib2
+import requests
 from datetime import datetime
 from time import strptime
 from models import *
@@ -205,16 +204,16 @@ def get(endpoint, params=None):
     else:
         url = Api.cdn_url.format(endpoint)
     if params is None:
-        content = urllib2.urlopen(url).read()
+        content = requests.get(url)
     else:
-        content = urllib2.urlopen(url + urllib.urlencode(params)).read()
+        content = requests.get(url,params=params)
     if Settings.caching:
         cache_file = url.replace(Api.api_url, '')
         cache_file = 'cache/' + cache_file.replace('/', '`') + '.json'
         cache = open(cache_file, 'w')
-        cache.write(content)
+        cache.write(content.text)
         cache.close()
-    return json.loads(content)
+    return content.json()
 
 
 def try_cache(url):
