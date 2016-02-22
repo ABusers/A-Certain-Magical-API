@@ -15,6 +15,7 @@ class Settings:
     sub_dub = 'both'
     caching = False
     json = str
+    timeout = 15.0
 
 
 class Api:
@@ -50,18 +51,21 @@ if os.path.exists('settings.json'):
         Settings.json = json.loads(config.read())
         Settings.sub_dub = Settings.json['sub_dub']
         Settings.caching = Settings.json['caching']
+        Settings.timeout = float(Settings.json['timeout'])
     except:
         config = open('settings.json', 'w')
-        config.write(dumps({'sub_dub': 'both', 'caching': False}))
+        config.write(dumps({'sub_dub': 'both', 'caching': False, 'timeout': 15.0}))
         config.close()
         Settings.sub_dub = 'both'
         Settings.caching = False
+        Settings.timeout = 15.0
 else:
     config = open('settings.json', 'w')
-    config.write(dumps({'sub_dub': 'both', 'caching': False}))
+    config.write(dumps({'sub_dub': 'both', 'caching': False, 'timeout': 15.0}))
     config.close()
     Settings.sub_dub = 'both'
     Settings.caching = False
+    Settings.timeout = 15.0
 
 
 def fix_keys(d):
@@ -204,9 +208,9 @@ def get(endpoint, params=None):
     else:
         url = Api.cdn_url.format(endpoint)
     if params is None:
-        content = requests.get(url)
+        content = requests.get(url,timeout=Settings.timeout)
     else:
-        content = requests.get(url,params=params)
+        content = requests.get(url,params=params,timeout=Settings.timeout)
     if Settings.caching:
         cache_file = url.replace(Api.api_url, '')
         cache_file = 'cache/' + cache_file.replace('/', '`') + '.json'
@@ -324,15 +328,18 @@ def print_videos(item_list):
             print title, ':', item_url
 
 
-def set_settings(sub_dub='both', caching=False):
+def set_settings(sub_dub='both', caching=False,timeout=15.0):
     if sub_dub not in {'both', 'sub', 'dub'}:
         print 'Invalid sub/dub setting'
         return
     if type(caching) != bool:
         print 'Invalid caching setting'
         return
+    if type(timeout) != float:
+        print 'Invalid timeout setting'
+        return
     set_conf = open('settings.json', 'w')
-    set_conf.write(dumps({'sub_dub': sub_dub, 'caching': caching}))
+    set_conf.write(dumps({'sub_dub': sub_dub, 'caching': caching, 'timeout': timeout}))
     set_conf.close()
     Settings.sub_dub = sub_dub
     Settings.caching = caching
