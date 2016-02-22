@@ -328,6 +328,9 @@ def set_settings(sub_dub='both', caching=False):
     if sub_dub not in {'both', 'sub', 'dub'}:
         print 'Invalid sub/dub setting'
         return
+    if type(caching) != bool:
+        print 'Invalid caching setting'
+        return
     set_conf = open('settings.json', 'w')
     set_conf.write(dumps({'sub_dub': sub_dub, 'caching': caching}))
     set_conf.close()
