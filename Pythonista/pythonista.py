@@ -10,10 +10,10 @@ import clipboard
 ROOT_PATH = os.path.dirname(__file__)
 sys.path.append(os.path.join(ROOT_PATH, '..'))
 #up a level to get to the funimation file
+os.chdir('..')
 import funimation as f
 import models as m
 
-os.chdir('..')
 
 def dumps(dictionary):
     return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
