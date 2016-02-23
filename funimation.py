@@ -40,7 +40,8 @@ class Api:
         'trailers': 'mobile/trailers.json/sequence/{order}/{showid}/all/all?page={page}',
         'movies': 'mobile/movies.json/{v_type}/{sort}/{order}/all/{showid}?page={page}',
         'episodes': 'mobile/episodes.json/{v_type}/sequence/{order}/all/{showid}?page={page}',
-        'stream': 'http://wpc.8c48.edgecastcdn.net/038C48/SV/480/{video_id}/{video_id}-480-{quality}K.mp4.m3u8?9b303b6c62204a9dcb5ce5f5c607',
+        'stream': ('http://wpc.8c48.edgecastcdn.net/038C48/SV/480/'
+                   '{video_id}/{video_id}-480-{quality}K.mp4.m3u8?9b303b6c62204a9dcb5ce5f5c607'),
     }
 
 
@@ -208,9 +209,9 @@ def get(endpoint, params=None):
     else:
         url = Api.cdn_url.format(endpoint)
     if params is None:
-        content = requests.get(url,timeout=Settings.timeout)
+        content = requests.get(url, timeout=Settings.timeout)
     else:
-        content = requests.get(url,params=params,timeout=Settings.timeout)
+        content = requests.get(url, params=params, timeout=Settings.timeout)
     if Settings.caching:
         cache_file = url.replace(Api.api_url, '')
         cache_file = 'cache/' + cache_file.replace('/', '`') + '.json'
@@ -328,7 +329,7 @@ def print_videos(item_list):
             print title, ':', item_url
 
 
-def set_settings(sub_dub='both', caching=False,timeout=15.0):
+def set_settings(sub_dub='both', caching=False, timeout=15.0):
     if sub_dub not in {'both', 'sub', 'dub'}:
         print 'Invalid sub/dub setting'
         return
