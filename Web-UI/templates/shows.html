@@ -1,0 +1,14 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Shows</title>
+</head>
+<body>
+{% for i in range(0, len(shows)) %}
+    <!-- <img alt="{{ shows[i].title }}" src="{{ shows[i].show_thumbnail }}"> -->
+    <a href="show/{{ i }}">{{shows[i].title}}</a>
+    <br>
+{% endfor %}
+</body>
+</html>
