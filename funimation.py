@@ -274,6 +274,10 @@ def qual(episode):
 def get_shows():
     show_url = get_data_url('shows')
     shows = process_data(Api.api_url + show_url)
+    # Changing the mobile image urls to Xbox images
+    for k in range(0,len(shows)):
+        shows[k].show_thumbnail = shows[k].show_thumbnail.replace('1_thumbnail','xbox_thumbnail')
+        shows[k].show_thumbnail_accedo = shows[k].show_thumbnail_accedo.replace('1_thumbnail','xbox_thumbnail')
     return shows
 
 
