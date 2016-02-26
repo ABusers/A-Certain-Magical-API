@@ -1,3 +1,15 @@
+"""
+Funimation API
+~~~~~~~~~~~~~~
+
+This file implements tools for working with the
+Funimation video streaming service.
+
+:copyright: (c) 2015 ABusers
+:license: MIT See LICENSE for details
+
+"""
+
 import json
 import os
 import requests
@@ -12,6 +24,9 @@ def dumps(dictionary):
 
 
 class Settings:
+    """
+    This class holds the variables for settings.
+    """
     sub_dub = 'both'
     caching = False
     json = str
@@ -19,6 +34,10 @@ class Settings:
 
 
 class Api:
+    """
+    This class holds static variables to make writing
+    new code easier.
+    """
     cdn_url = 'http://wpc.8c48.edgecastcdn.net'
     bit_rate = [2000, 3500, 4000]
     api_url = 'https://www.funimation.com/'
@@ -46,7 +65,6 @@ class Api:
 
 
 if os.path.exists('settings.json'):
-    # noinspection PyBroadException
     try:
         config = open('settings.json', 'r')
         Settings.json = json.loads(config.read())
@@ -142,7 +160,6 @@ def process_response(data):
 
 
 def filter_response(data):
-    # just check the first object since all will be the same
     if data[0].get('sub_dub') is None:
         return data
     # both
