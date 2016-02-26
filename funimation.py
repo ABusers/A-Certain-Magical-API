@@ -240,7 +240,7 @@ def get(endpoint, params=None):
 
 def try_cache(url):
     if Settings.caching:
-        if os.path.exists('cache/') == False:
+        if not os.path.exists('cache/'):
             os.mkdir('cache')
         cache_file = url.replace(Api.api_url, '')
         cache_file = 'cache/' + cache_file.replace('/', '`') + '.json'
