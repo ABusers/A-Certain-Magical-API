@@ -1,16 +1,16 @@
 # coding: utf-8
-import flask
 import os
 import sys
+from flask import Flask, render_template
 # import the funimation file
 ROOT_PATH = os.path.dirname(__file__)
 sys.path.append(os.path.join(ROOT_PATH, '..'))
 # up a level to get to the funimation file
 os.chdir('..')
 import funimation as f
-import models as m
+
 debug = True
-from flask import Flask, render_template
+
 shows = f.get_shows()
 app = Flask(__name__)
 

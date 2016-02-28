@@ -1,11 +1,11 @@
 # coding: utf-8
-import dialogs
+import json
 import os
 import sys
-import webbrowser
 import urlparse
-import json
+import webbrowser
 import clipboard
+import dialogs
 
 # import the funimation file
 ROOT_PATH = os.path.dirname(__file__)
@@ -13,7 +13,6 @@ sys.path.append(os.path.join(ROOT_PATH, '..'))
 # up a level to get to the funimation file
 os.chdir('..')
 import funimation as f
-import models as m
 
 
 def dumps(dictionary):
@@ -59,13 +58,13 @@ def showpicker():
 def videos_list(item_list):
     vlist = []
     for parts in item_list:
-        if type(parts) is m.Clip:
+        if type(parts) is f.Clip:
             item_url = f.stream_url(parts.funimation_id, parts.quality)
             vlist += [{'title': parts.title, 'url': item_url}]
-        elif type(parts) is m.Movie:
+        elif type(parts) is f.Movie:
             item_url = f.stream_url(parts.funimation_id, parts.quality)
             vlist += [{'title': parts.title + ' - ' + parts.sub_dub, 'url': item_url}]
-        elif type(parts) is m.Episode:
+        elif type(parts) is f.Episode:
             item_url = f.stream_url(parts.funimation_id, f.qual(parts))
             ep_num = str(parts.episode_number)
             vlist += [{'title': ep_num + ' : ' + parts.title + '-' + parts.sub_dub, 'url': item_url}]
