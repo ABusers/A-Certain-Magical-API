@@ -3,10 +3,8 @@ import os
 import sys
 from flask import Flask, render_template
 # import the funimation file
-ROOT_PATH = os.path.dirname(__file__)
+ROOT_PATH = os.getcwd()
 sys.path.append(os.path.join(ROOT_PATH, '..'))
-# up a level to get to the funimation file
-os.chdir('..')
 import funimation as f
 
 debug = True
