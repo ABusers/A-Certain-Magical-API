@@ -63,23 +63,34 @@ class Api:
                    '{video_id}/{video_id}-480-{quality}K.mp4.m3u8?9b303b6c62204a9dcb5ce5f5c607'),
     }
 
-
-if os.path.exists('settings.json'):
+'''
+Attempting to make sure that all the config and cache goes into one directory
+'''
+config_path = '.'
+config_dir = '/config/'
+config_file = 'settings.json'
+if not os.path.exists('config/'):
+    config_path = '..'
+    if not os.path.exists(config_path+config_dir):
+        os.mkdir(config_path+config_dir)
+resolved_settings = config_path+config_dir+config_file
+cache_dir = config_path+config_dir+'/cache/'
+if os.path.exists(resolved_settings):
     try:
-        config = open('settings.json', 'r')
+        config = open(resolved_settings, 'r')
         Settings.json = json.loads(config.read())
         Settings.sub_dub = Settings.json['sub_dub']
         Settings.caching = Settings.json['caching']
         Settings.timeout = float(Settings.json['timeout'])
     except:
-        config = open('settings.json', 'w')
+        config = open(resolved_settings, 'w')
         config.write(dumps({'sub_dub': 'both', 'caching': False, 'timeout': 15.0}))
         config.close()
         Settings.sub_dub = 'both'
         Settings.caching = False
         Settings.timeout = 15.0
 else:
-    config = open('settings.json', 'w')
+    config = open(resolved_settings, 'w')
     config.write(dumps({'sub_dub': 'both', 'caching': False, 'timeout': 15.0}))
     config.close()
     Settings.sub_dub = 'both'
@@ -231,7 +242,7 @@ def get(endpoint, params=None):
         content = requests.get(url, params=params, timeout=Settings.timeout)
     if Settings.caching:
         cache_file = url.replace(Api.api_url, '')
-        cache_file = 'cache/' + cache_file.replace('/', '`') + '.json'
+        cache_file = cache_dir + cache_file.replace('/', '`') + '.json'
         cache = open(cache_file, 'w')
         cache.write(content.text)
         cache.close()
@@ -240,10 +251,10 @@ def get(endpoint, params=None):
 
 def try_cache(url):
     if Settings.caching:
-        if not os.path.exists('cache/'):
-            os.mkdir('cache')
+        if not os.path.exists(cache_dir):
+            os.mkdir(cache_dir)
         cache_file = url.replace(Api.api_url, '')
-        cache_file = 'cache/' + cache_file.replace('/', '`') + '.json'
+        cache_file = cache_dir + cache_file.replace('/', '`') + '.json'
         if os.path.exists(cache_file):
             last_modified = os.path.getmtime(cache_file)
             if (time.time() - last_modified) / 86400 < 1:
