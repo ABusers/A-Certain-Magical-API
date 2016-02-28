@@ -17,18 +17,18 @@ def dumps(dictionary):
     return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
 
 
-if os.path.exists('ios-settings.json'):
+if os.path.exists('../config/ios-settings.json'):
     try:
-        config_ios = open('ios-settings.json', 'r')
+        config_ios = open('../config/ios-settings.json', 'r')
         jsonstr = json.load(config_ios)
         opener = jsonstr['opener']
     except:
-        config_ios = open('ios-settings.json', 'w')
+        config_ios = open('../config/ios-settings.json', 'w')
         config_ios.write(dumps({'opener': 'Safari'}))
         config_ios.close()
         opener = 'Safari'
 else:
-    config = open('ios-settings.json', 'w')
+    config = open('../config/ios-settings.json', 'w')
     config.write(dumps({'opener': 'Safari'}))
     config.close()
     opener = 'Safari'
