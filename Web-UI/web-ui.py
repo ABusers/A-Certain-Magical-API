@@ -15,7 +15,6 @@ shows = f.get_shows()
 app = Flask(__name__)
 
 
-
 @app.route('/')
 def index():
     return render_template('shows.html', shows=shows, len=len)
