@@ -6,7 +6,7 @@
 </head>
 <body>
 {% for i in range(0, len(eps)) %}
-<h1><a href="{{cdnurl(eps[i].funimation_id,eps[i].quality)}}">{{eps[i].label}}</a></h1>
+<a href="{{cdnurl(eps[i].funimation_id,eps[i].quality)}}">{{eps[i].label}}</a><br>
 {% endfor %}
 </body>
 </html>
