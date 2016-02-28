@@ -19,20 +19,27 @@ if os.path.exists(config_file):
         jsonstr = json.load(config)
         debug = jsonstr['Debug']
         port = jsonstr['Port']
+        public = jsonstr['Public']
     except:
         config = open(config_file, 'w')
-        config.write(dumps({'Debug': True, 'Port': 8080}))
+        config.write(dumps({'Debug': True, 'Port': 8080, 'Public': False}))
         config.close()
         debug = True
         port = 8080
+        public = False
 
 else:
     config = open(config_file, 'w')
-    config.write(dumps({'Debug': True, 'Port': 8080}))
+    config.write(dumps({'Debug': True, 'Port': 8080, 'Public': False}))
     config.close()
     debug = True
     port = 8080
+    public = False
 
+if public:
+    bind = '0.0.0.0'
+else:
+    bind = '127.0.0.1'
 shows = f.get_shows()
 app = Flask(__name__)
 
@@ -53,5 +60,5 @@ def show(n):
 
 
 if __name__ == '__main__':
-    app.run(port=port,debug=debug)
+    app.run(port=port,debug=debug,host=bind)
     print 'done'
