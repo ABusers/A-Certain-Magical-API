@@ -27,7 +27,7 @@ def show(n, subdub):
     eps = [x for x in f.get_videos(int(nid)) if x.sub_dub.lower() == subdub]  # Hacky, needs architecture fix
     title = shows[n].label
     cdnurl = f.stream_url
-    return render_template('eps.html', eps=eps, title=title, cdnurl=cdnurl)
+    return render_template('episodes.html', eps=eps, title=title, cdnurl=cdnurl)
 
 
 if __name__ == '__main__':
