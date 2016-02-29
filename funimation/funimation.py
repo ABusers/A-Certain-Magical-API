@@ -10,6 +10,7 @@ Funimation video streaming service.
 
 """
 
+from __future__ import print_function
 import json
 import os
 import requests
@@ -260,7 +261,7 @@ def try_cache(url):
             if (time.time() - last_modified) / 86400 < 1:
                 try:
                     data = json.loads(open(cache_file).read())
-                    print 'got from cache'
+                    print('got from cache')
                     return data
                 except:
                     return get(url)
@@ -286,9 +287,9 @@ def get_shows():
     show_url = get_data_url('shows')
     shows = process_data(Api.api_url + show_url)
     # Changing the mobile image urls to Xbox images
-    for k in range(0,len(shows)):
-        shows[k].show_thumbnail = shows[k].show_thumbnail.replace('1_thumbnail','xbox_thumbnail')
-        shows[k].show_thumbnail_accedo = shows[k].show_thumbnail_accedo.replace('1_thumbnail','xbox_thumbnail')
+    for k in range(0, len(shows)):
+        shows[k].show_thumbnail = shows[k].show_thumbnail.replace('1_thumbnail', 'xbox_thumbnail')
+        shows[k].show_thumbnail_accedo = shows[k].show_thumbnail_accedo.replace('1_thumbnail', 'xbox_thumbnail')
     return shows
 
 
@@ -335,7 +336,7 @@ def print_shows(show_list):
     n = 0
     for item in show_list:
         title = item.title
-        print n, ':', title, '- nid:', item.nid
+        print(n, ':', title, '- nid:', item.nid)
         n += 1
 
 
@@ -344,32 +345,32 @@ def print_videos(item_list):
         if type(item) == Clip:
             title = item.title
             item_url = stream_url(item.funimation_id, item.quality)
-            print title, ':', item_url
+            print(title, ':', item_url)
         elif type(item) == Movie:
             title = item.title
             item_url = stream_url(item.funimation_id, item.quality)
-            print title, '-', item.sub_dub, ':', item_url
+            print(title, '-', item.sub_dub, ':', item_url)
         elif type(item) == Episode:
             title = item.title
             ep_number = item.episode_number
             lang = item.sub_dub
             item_url = stream_url(item.funimation_id, qual(item))
-            print ep_number, ':', title, '-', lang, ':', item_url
+            print(ep_number, ':', title, '-', lang, ':', item_url)
         else:
             title = item.title
             item_url = stream_url(item.funimation_id, qual(item))
-            print title, ':', item_url
+            print(title, ':', item_url)
 
 
 def set_settings(sub_dub='both', caching=False, timeout=15.0):
     if sub_dub not in {'both', 'sub', 'dub'}:
-        print 'Invalid sub/dub setting'
+        print('Invalid sub/dub setting')
         return
     if type(caching) != bool:
-        print 'Invalid caching setting'
+        print('Invalid caching setting')
         return
     if type(timeout) != float:
-        print 'Invalid timeout setting'
+        print('Invalid timeout setting')
         return
     set_conf = open('settings.json', 'w')
     set_conf.write(dumps({'sub_dub': sub_dub, 'caching': caching, 'timeout': timeout}))
