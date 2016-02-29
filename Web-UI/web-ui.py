@@ -1,64 +1,62 @@
+#!/usr/bin/env python
 # coding: utf-8
+
 import os
 import sys
-import json
-from flask import Flask, render_template
+import requests
+from flask import Flask, Response, render_template
 # import the funimation file
-ROOT_PATH = os.getcwd()
-sys.path.append(os.path.join(ROOT_PATH, '..'))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import funimation as f
 
-
-def dumps(dictionary):
-    return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
-
-config_file = '../config/web-ui.json'
-if os.path.exists(config_file):
-    try:
-        config = open(config_file, 'r')
-        jsonstr = json.load(config)
-        debug = jsonstr['Debug']
-        port = jsonstr['Port']
-        public = jsonstr['Public']
-    except:
-        config = open(config_file, 'w')
-        config.write(dumps({'Debug': True, 'Port': 8080, 'Public': False}))
-        config.close()
-        debug = True
-        port = 8080
-        public = False
-
-else:
-    config = open(config_file, 'w')
-    config.write(dumps({'Debug': True, 'Port': 8080, 'Public': False}))
-    config.close()
-    debug = True
-    port = 8080
-    public = False
-
-if public:
-    bind = '0.0.0.0'
-else:
-    bind = '127.0.0.1'
-shows = f.get_shows()
 app = Flask(__name__)
+app.config.from_object('config')
+
+shows = f.get_shows()
+
+s = requests.session()
+s.headers = {'User-Agent: FAPI Web'}
 
 
 @app.route('/')
 def index():
-    return render_template('shows.html', shows=shows, len=len)
+    return render_template('shows.html', shows=shows)
 
 
-@app.route('/show/<n>')
-def show(n):
-    n = int(n)
+@app.route('/show/<int:n>/<subdub>')
+def show(n, subdub):
+    if subdub not in ["sub", "dub"]:
+        return "Error: invalid sub/dub selection"
     nid = shows[n].nid
-    eps = f.get_videos(int(nid))
+    eps = [x for x in f.get_videos(int(nid)) if x.sub_dub.lower() == subdub]  # Hacky, needs architecture fix
     title = shows[n].label
-    cdnurl = f.stream_url
-    return render_template('eps.html', eps=eps, len=len,title=title,cdnurl=cdnurl)
+    return render_template('episodes.html', eps=eps, title=title, n=n, subdub=subdub)
+
+
+@app.route('/show/<int:n>/<subdub>/<int:episode_number>/<int:quality>/play')
+def play_episode(n, subdub, episode_number, quality):
+    nid = shows[n].nid
+
+    # Gross, needs architecture fix
+    episode = None
+    for ep in f.get_videos(int(nid)):
+        if ep.sub_dub.lower() == subdub and ep.episode_number == episode_number:
+            episode = ep
+            break
+
+    playlist_url = f.stream_url(episode.funimation_id, quality)  # , episode.quality)
+
+    playlist = s.get(playlist_url).text
+    playlist_path = "/".join(playlist_url.split("/")[:-1])
+    rebuilt_playlist = ""
+    for line in playlist.split("\n"):
+        if line.startswith("#"):
+            rebuilt_playlist += line + "\n"
+        else:
+            rebuilt_playlist += playlist_path + "/" + line + "\n"
+
+    return Response(rebuilt_playlist, mimetype="application/vnd.apple.mpegurl")
 
 
 if __name__ == '__main__':
-    app.run(port=port,debug=debug,host=bind)
-    print 'done'
+    app.run(host=app.config['HOST'], port=app.config['PORT'])

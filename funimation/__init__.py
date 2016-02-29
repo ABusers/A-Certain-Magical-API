@@ -1,1 +1,1 @@
-from funimation import *
+from .funimation import *
