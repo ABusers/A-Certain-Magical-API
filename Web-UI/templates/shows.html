@@ -5,9 +5,11 @@
     <title>Shows</title>
 </head>
 <body>
-{% for i in range(0, len(shows)) %}
+{% for i in range(0, shows|length) %}
     <!-- <img alt="{{ shows[i].title }}" src="{{ shows[i].show_thumbnail }}"> -->
-    <a href="show/{{ i }}">{{shows[i].title}}</a>
+    {{shows[i].title}}
+    <a href="show/{{ i }}/dub">dub</a>
+    <a href="show/{{ i }}/sub">sub</a>
     <br>
 {% endfor %}
 </body>

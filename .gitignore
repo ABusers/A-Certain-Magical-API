@@ -1,3 +1,6 @@
+*.pyc
 cache/
+__pycache__
 .idea/
 config/
+Web-UI/config.py

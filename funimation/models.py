@@ -12,7 +12,7 @@ class TemplateModel(object):
 
     def __init__(self, **kwargs):
         self._fields.extend(self._common_fields)
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             if k in self._fields:
                 setattr(self, k, v)
 

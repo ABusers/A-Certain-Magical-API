@@ -16,12 +16,8 @@ import os
 import requests
 from datetime import datetime
 from time import strptime
-from models import *
+from .models import Show, Episode, Movie, Clip, Trailer, EpisodeDetail
 import time
-
-
-def dumps(dictionary):
-    return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
 
 
 class Settings:
@@ -85,14 +81,14 @@ if os.path.exists(resolved_settings):
         Settings.timeout = float(Settings.json['timeout'])
     except:
         config = open(resolved_settings, 'w')
-        config.write(dumps({'sub_dub': 'both', 'caching': False, 'timeout': 15.0}))
+        config.write(json.dumps({'sub_dub': 'both', 'caching': False, 'timeout': 15.0}))
         config.close()
         Settings.sub_dub = 'both'
         Settings.caching = False
         Settings.timeout = 15.0
 else:
     config = open(resolved_settings, 'w')
-    config.write(dumps({'sub_dub': 'both', 'caching': False, 'timeout': 15.0}))
+    config.write(json.dumps({'sub_dub': 'both', 'caching': False, 'timeout': 15.0}))
     config.close()
     Settings.sub_dub = 'both'
     Settings.caching = False
@@ -105,7 +101,7 @@ def fix_keys(d):
 
     def fix(x):
         if isinstance(x, dict):
-            return dict((fix_key(k), fix(v)) for k, v in x.iteritems())
+            return dict((fix_key(k), fix(v)) for k, v in x.items())
         elif isinstance(x, list):
             return [fix(i) for i in x]
         else:
@@ -373,7 +369,7 @@ def set_settings(sub_dub='both', caching=False, timeout=15.0):
         print('Invalid timeout setting')
         return
     set_conf = open('settings.json', 'w')
-    set_conf.write(dumps({'sub_dub': sub_dub, 'caching': caching, 'timeout': timeout}))
+    set_conf.write(json.dumps({'sub_dub': sub_dub, 'caching': caching, 'timeout': timeout}))
     set_conf.close()
     Settings.sub_dub = sub_dub
     Settings.caching = caching

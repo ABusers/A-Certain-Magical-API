@@ -5,8 +5,8 @@
     <title>{{title}}</title>
 </head>
 <body>
-{% for i in range(0, len(eps)) %}
-<a href="{{cdnurl(eps[i].funimation_id,eps[i].quality)}}">{{eps[i].label}}</a><br>
+{% for i in range(0, eps|length) %}
+    <a href="{{cdnurl(eps[i].funimation_id,eps[i].quality)}}">{{eps[i].label}}</a><br>
 {% endfor %}
 </body>
 </html>
