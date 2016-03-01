@@ -1,16 +1,15 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>Shows</title>
-</head>
-<body>
-{% for i in range(0, shows|length) %}
-    <!-- <img alt="{{ shows[i].title }}" src="{{ shows[i].show_thumbnail }}"> -->
-    {{shows[i].title}}
-    <a href="show/{{ i }}/dub">dub</a>
-    <a href="show/{{ i }}/sub">sub</a>
-    <br>
-{% endfor %}
-</body>
-</html>
+{% extends "base.html" %}
+{% set title = "Shows" %}
+{% block body %}
+    <div id="flexwrap">
+        {% for i in range(0, shows|length) %}
+            <div class="show">
+                <img class="thumbnail" alt="{{ shows[i].title }}" src="{{ shows[i].show_thumbnail }}">
+                <div class="title">{{shows[i].title}}</div>
+                <div class="subdub">
+                    <a href="show/{{ i }}/dub">dub</a> &bull; <a href="show/{{ i }}/sub">sub</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
