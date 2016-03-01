@@ -46,15 +46,7 @@ def play_episode(n, subdub, episode_number, quality):
 
     playlist_url = f.stream_url(episode.funimation_id, quality)  # , episode.quality)
 
-    playlist = s.get(playlist_url).text
-    playlist_path = "/".join(playlist_url.split("/")[:-1])
-    rebuilt_playlist = ""
-    for line in playlist.split("\n"):
-        if line.startswith("#"):
-            rebuilt_playlist += line + "\n"
-        else:
-            rebuilt_playlist += playlist_path + "/" + line + "\n"
-
+    rebuilt_playlist = "#EXTM3U\n"+playlist_url
     return Response(rebuilt_playlist, mimetype="application/vnd.apple.mpegurl")
 
 
