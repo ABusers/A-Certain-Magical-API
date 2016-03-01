@@ -1,1 +1,2 @@
-from .funimation import *
+# -*- coding: utf-8 -*-
+from .api import Funimation

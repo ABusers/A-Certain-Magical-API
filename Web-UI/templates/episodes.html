@@ -4,16 +4,16 @@
     <h1>{{ title }}</h1>
     <div id="flexwrap">
         {% for i in range(0, eps|length) %}
-        {% set filename = (eps[i].episode_number|string + '. ' + eps[i].title + '.m3u8').replace("/", " ") %}
+        {% set filename = (eps[i].info['episode']|string + '. ' + eps[i].title + '.m3u8').replace("/", " ") %}
             <div class="episode">
-                <a href="{{ url_for('play_episode', n=n, subdub=subdub, episode_number=eps[i].episode_number,
+                <a href="{{ url_for('play_episode', n=n, subdub=subdub, episode_number=eps[i].info['episode'],
                                     quality=eps[i].quality, filename=filename) }}">
-                    <img class="thumbnail" src="{{ eps[i].episode_thumbnail }}">
-                    <div class="episode_number">Episode {{ eps[i].episode_number }}</div>
+                    <img class="thumbnail" src="{{ eps[i].thumbnail }}">
+                    <div class="episode_number">Episode {{ eps[i].info['episode'] }}</div>
                     <div class="episode_title">{{ eps[i].title }}</div>
                 </a>
                 <div class="episode_title">
-                    <a href="{{ cdnurl(eps[i].funimation_id, eps[i].quality) }}">Mobile URL</a>
+                    <a href="{{ eps[i].video_url }}">Mobile URL</a>
                 </div>
             </div>
         {% endfor %}

@@ -10,9 +10,9 @@ import dialogs
 # import the funimation file
 ROOT_PATH = os.path.dirname(__file__)
 sys.path.append(os.path.join(ROOT_PATH, '..'))
-import funimation as f
+import funimation
 
-
+f = funimation.Funimation()
 def dumps(dictionary):
     return json.dumps(dictionary, sort_keys=True, indent=4, separators=(',', ': '))
 
@@ -49,26 +49,16 @@ for i in openwith:
 def showpicker():
     slist = [{'title': 'Opener'}]
     for i in f.get_shows():
-        slist += [{'title': i.title, 'nid': i.nid, 'content_types': i.video_section}]
+        slist += [{'title': i.series_name, 'asset_id': i.asset_id, 'content_types': i.video_section}]
     return slist
 
 
 def videos_list(item_list):
     vlist = []
     for parts in item_list:
-        if type(parts) is f.Clip:
-            item_url = f.stream_url(parts.funimation_id, parts.quality)
-            vlist += [{'title': parts.title, 'url': item_url}]
-        elif type(parts) is f.Movie:
-            item_url = f.stream_url(parts.funimation_id, parts.quality)
-            vlist += [{'title': parts.title + ' - ' + parts.sub_dub, 'url': item_url}]
-        elif type(parts) is f.Episode:
-            item_url = f.stream_url(parts.funimation_id, f.qual(parts))
-            ep_num = str(parts.episode_number)
-            vlist += [{'title': ep_num + ' : ' + parts.title + '-' + parts.sub_dub, 'url': item_url}]
-        else:
-            item_url = f.stream_url(parts.funimation_id, f.qual(parts))
-            vlist += [{'title': parts.title, 'url': item_url}]
+        item_url = parts.video_url
+        ep_num = str(parts.info['episode'])
+        vlist += [{'title': ep_num + ' : ' + parts.title + '-' + parts.dub_sub, 'url': item_url}]
     return vlist
 
 
@@ -81,10 +71,7 @@ if choice['title'] is 'Opener':
     config_ios.write(dumps({'opener': choice['title']}))
     config_ios.close()
     sys.exit('Settings changed')
-picked_type = dialogs.list_dialog('Type', choice['content_types'])
-if picked_type is None:
-    sys.exit('Quit')
-vtable = f.get_videos(choice['nid'], picked_type)
+vtable = f.get_videos(choice['asset_id'])
 videos = videos_list(vtable)
 item = dialogs.list_dialog(choice['title'], videos)
 if item is None:
