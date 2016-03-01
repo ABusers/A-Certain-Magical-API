@@ -1,0 +1,58 @@
+body {
+    background-color: #ddd;
+}
+.thumbnail {
+    display: block;
+    max-width: 100%;
+    /*min-width: 50px;*/
+    margin: auto;
+}
+.show {
+    margin: 8px;
+    flex: 0 1 auto;
+    width: 200px;
+    padding: 8px;
+    background-color: #f5f5f5;
+    border: 1px #aaa solid;
+    box-shadow: 0 0 3px #bbb;
+}
+.episode {
+    margin: 8px;
+    flex: 0 1 auto;
+    width: 200px;
+    padding: 8px;
+    background-color: #f5f5f5;
+    border: 1px #aaa solid;
+    box-shadow: 0 0 3px #bbb;
+}
+a {
+    color: #3333ff;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+.title {
+    text-align: center;
+    margin-top: 0.5em;
+    font-weight: bold;
+}
+.subdub {
+    text-align: center;
+    margin-top: 0.2em;
+}
+.episode_number {
+    margin-top: 0.5em;
+}
+.episode_title {
+    margin-top: 0.2em;
+    font-size: 90%;
+}
+#flexwrap {
+    margin: auto;
+    max-width: 950px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}

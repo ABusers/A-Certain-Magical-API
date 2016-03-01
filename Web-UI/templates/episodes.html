@@ -1,15 +1,16 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>{{title}}</title>
-</head>
-<body>
-{% for i in range(0, eps|length) %}
-    <a href="{{url_for('play_episode', n=n, subdub=subdub,
-                        episode_number=eps[i].episode_number, quality=eps[i].quality)}}">
-        {{eps[i].episode_number}}. {{eps[i].title}}
-    </a><br>
-{% endfor %}
-</body>
-</html>
+{% extends "base.html" %}
+{% set title = title + " - Episodes" %}
+{% block body %}
+    <div id="flexwrap">
+        {% for i in range(0, eps|length) %}
+            <div class="episode">
+                <a href="{{url_for('play_episode', n=n, subdub=subdub,
+                                    episode_number=eps[i].episode_number, quality=eps[i].quality)}}">
+                    <img class="thumbnail" src="{{eps[i].episode_thumbnail}}">
+                    <div class="episode_number">Episode {{eps[i].episode_number}}</div>
+                    <div class="episode_title">{{eps[i].title}}</div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
