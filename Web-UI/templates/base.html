@@ -1,7 +1,7 @@
 <!doctype html>
 <html><head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Funimation</title>
+    <title>Funimation{{ " - " + title if title else "" }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head><body>
     {% block body %}{% endblock %}

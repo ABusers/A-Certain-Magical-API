@@ -37,14 +37,14 @@ def index():
 
 @app.route('/show/<int:asset_id>/<subdub>')
 def show(asset_id, subdub):
+    show_title = shows[shows.index(str(asset_id))].label
     if subdub not in ["sub", "dub"]:
         return "Error: invalid sub/dub selection"
     try:
         eps = [x for x in f.get_videos(int(asset_id)) if x.dub_sub.lower() == subdub]  # Hacky, needs architecture fix
     except AttributeError:  # FIXME: This is not the correct way to do this.
         return render_template('message.html', message="API Error: Does this show have any episodes?")
-#    title = shows[asset_id].label
-    return render_template('episodes.html', eps=eps, show_id=asset_id, subdub=subdub)
+    return render_template('episodes.html',title=show_title, eps=eps, show_id=asset_id, subdub=subdub)
 
 
 @app.route('/show/<int:asset_id>/{sub,dub}/<int:episode_id>/play', defaults={'filename': None})
