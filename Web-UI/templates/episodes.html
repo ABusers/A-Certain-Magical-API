@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% set title = title + " - Episodes" %}
 {% block body %}
+    <h1>{{ title }}</h1>
     <div id="flexwrap">
         {% for i in range(0, eps|length) %}
             <div class="episode">
