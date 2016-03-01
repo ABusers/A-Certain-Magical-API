@@ -36,7 +36,10 @@ def show(n, subdub):
     if subdub not in ["sub", "dub"]:
         return "Error: invalid sub/dub selection"
     nid = shows[n].nid
-    eps = [x for x in f.get_videos(int(nid)) if x.sub_dub.lower() == subdub]  # Hacky, needs architecture fix
+    try:
+        eps = [x for x in f.get_videos(int(nid)) if x.sub_dub.lower() == subdub]  # Hacky, needs architecture fix
+    except AttributeError:  # FIXME: This is not the correct way to do this.
+        return render_template('message.html', message="API Error: Does this show have any episodes?")
     title = shows[n].label
     return render_template('episodes.html', eps=eps, title=title, n=n, subdub=subdub, cdnurl=f.stream_url)
 
