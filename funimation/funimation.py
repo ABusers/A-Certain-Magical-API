@@ -239,7 +239,7 @@ def get(endpoint, params=None):
         content = requests.get(url, params=params, timeout=Settings.timeout)
     if Settings.caching:
         cache_file = url.replace(Api.api_url, '')
-        cache_file = cache_dir + cache_file.replace('/', '`') + '.json'
+        cache_file = cache_dir + cache_file.replace('/', '`').replace('?','=') + '.json'
         cache = open(cache_file, 'w')
         cache.write(content.text)
         cache.close()
@@ -251,6 +251,7 @@ def try_cache(url):
         if not os.path.exists(cache_dir):
             os.mkdir(cache_dir)
         cache_file = url.replace(Api.api_url, '')
+        cache_file = cache_file.replace('?','=')
         cache_file = cache_dir + cache_file.replace('/', '`') + '.json'
         if os.path.exists(cache_file):
             last_modified = os.path.getmtime(cache_file)
