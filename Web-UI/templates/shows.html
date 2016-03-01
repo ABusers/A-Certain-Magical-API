@@ -5,7 +5,7 @@
     <div id="flexwrap">
         {% for i in range(0, shows|length) %}
             <div class="show">
-                <img class="thumbnail" alt="{{ shows[i].title }}" src="{{ shows[i].show_thumbnail }}">
+                <img class="thumbnail" alt="{{ shows[i].title }}" src="{{ shows[i].icon }}">
                 <div class="title">{{shows[i].title}}</div>
                 <div class="subdub">
                     <a href="show/{{ i }}/dub">dub</a> &bull; <a href="show/{{ i }}/sub">sub</a>
