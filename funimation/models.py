@@ -156,7 +156,7 @@ class Episode(TemplateModel):
 
     @property
     def quality(self):
-        count = self.video_quality.count('HD (720)')
+        count = len(self.video_quality)
         if count >= 2:
             return 4000
         elif count == 1:
