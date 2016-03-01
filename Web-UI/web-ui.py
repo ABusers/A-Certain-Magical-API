@@ -10,7 +10,10 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import funimation as f
 from subprocess import check_output
 
-version = check_output(['git', 'rev-parse', '--short', 'HEAD'])
+if sys.platform not in {'iphoneos', 'win32'}:
+    version = check_output(['git', 'rev-parse', '--short', 'HEAD'])
+else:
+    version = 'Unavailable'
 
 app = Flask(__name__)
 app.config.from_object('config')
