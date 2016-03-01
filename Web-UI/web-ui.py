@@ -35,30 +35,27 @@ def index():
     return render_template('shows.html', shows=shows)
 
 
-@app.route('/show/<int:n>/<subdub>')
-def show(n, subdub):
+@app.route('/show/<int:asset_id>/<subdub>')
+def show(asset_id, subdub):
     if subdub not in ["sub", "dub"]:
         return "Error: invalid sub/dub selection"
-    show_id = shows[n].asset_id
     try:
-        eps = [x for x in f.get_videos(int(show_id)) if x.dub_sub.lower() == subdub]  # Hacky, needs architecture fix
+        eps = [x for x in f.get_videos(int(asset_id)) if x.dub_sub.lower() == subdub]  # Hacky, needs architecture fix
     except AttributeError:  # FIXME: This is not the correct way to do this.
         return render_template('message.html', message="API Error: Does this show have any episodes?")
-    title = shows[n].label
-    return render_template('episodes.html', eps=eps, title=title, n=n, subdub=subdub)
+#    title = shows[asset_id].label
+    return render_template('episodes.html', eps=eps, show_id=asset_id, subdub=subdub)
 
 
-@app.route('/show/<int:n>/<subdub>/<int:episode_number>/play', defaults={'filename': None})
-@app.route('/show/<int:n>/<subdub>/<int:episode_number>/play/<filename>')
-def play_episode(n, subdub, episode_number, filename):
+@app.route('/show/<int:asset_id>/{sub,dub}/<int:episode_id>/play', defaults={'filename': None})
+@app.route('/show/<int:asset_id>/{sub,dub}/<int:episode_id>/play/<filename>')
+def play_episode(asset_id, episode_id, filename):
     # Discard filename, that's just to make the browser happy.
-
-    asset_id = shows[n].asset_id
 
     # Gross, needs architecture fix
     episode = None
     for ep in f.get_videos(int(asset_id)):
-        if ep.sub_dub.lower() == subdub and ep.episode_number == episode_number:
+        if ep.asset_id == episode_id:
             episode = ep
             break
 

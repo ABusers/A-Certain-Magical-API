@@ -3,12 +3,12 @@
 {% block body %}
     <h1>Funimation - Shows</h1>
     <div id="flexwrap">
-        {% for i in range(0, shows|length) %}
+        {% for i in shows %}
             <div class="show">
-                <img class="thumbnail" alt="{{ shows[i].title }}" src="{{ shows[i].icon }}">
-                <div class="title">{{shows[i].title}}</div>
+                <img class="thumbnail" alt="{{ i.label }}" src="{{ i.icon }}">
+                <div class="title">{{i.label}}</div>
                 <div class="subdub">
-                    <a href="show/{{ i }}/dub">dub</a> &bull; <a href="show/{{ i }}/sub">sub</a>
+                    <a href="show/{{ i.asset_id }}/dub">dub</a> &bull; <a href="show/{{ i.asset_id }}/sub">sub</a>
                 </div>
             </div>
         {% endfor %}

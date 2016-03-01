@@ -1,13 +1,11 @@
 {% extends "base.html" %}
-{% set title = title + " - Episodes" %}
 {% block body %}
-    <h1>{{ title }}</h1>
     <div id="flexwrap">
         {% for i in range(0, eps|length) %}
         {% set filename = (eps[i].info['episode']|string + '. ' + eps[i].title + '.m3u8').replace("/", " ") %}
             <div class="episode">
-                <a href="{{ url_for('play_episode', n=n, subdub=subdub, episode_number=eps[i].info['episode'],
-                                    quality=eps[i].quality, filename=filename) }}">
+                <a href="{{ url_for('play_episode',asset_id=show_id,episode_id=eps[i].asset_id,
+                                    filename=filename) }}">
                     <img class="thumbnail" src="{{ eps[i].thumbnail }}">
                     <div class="episode_number">Episode {{ eps[i].info['episode'] }}</div>
                     <div class="episode_title">{{ eps[i].title }}</div>
