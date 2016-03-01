@@ -4,7 +4,7 @@
 import os
 import sys
 import requests
-from flask import Flask, Response, render_template
+from flask import Flask, make_response, render_template
 # import the funimation file
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import funimation as f
@@ -33,8 +33,11 @@ def show(n, subdub):
     return render_template('episodes.html', eps=eps, title=title, n=n, subdub=subdub, cdnurl=f.stream_url)
 
 
-@app.route('/show/<int:n>/<subdub>/<int:episode_number>/<int:quality>/play')
-def play_episode(n, subdub, episode_number, quality):
+@app.route('/show/<int:n>/<subdub>/<int:episode_number>/<int:quality>/play', defaults={'filename': None})
+@app.route('/show/<int:n>/<subdub>/<int:episode_number>/<int:quality>/play/<filename>')
+def play_episode(n, subdub, episode_number, quality, filename):
+    # Discard filename, that's just to make the browser happy.
+
     nid = shows[n].nid
 
     # Gross, needs architecture fix
@@ -46,8 +49,13 @@ def play_episode(n, subdub, episode_number, quality):
 
     playlist_url = f.stream_url(episode.funimation_id, quality)  # , episode.quality)
 
-    rebuilt_playlist = "#EXTM3U\n"+playlist_url
-    return Response(rebuilt_playlist, mimetype="application/vnd.apple.mpegurl")
+    response = make_response("#EXTM3U\n"+playlist_url)
+    response.headers['Content-Type'] = 'application/vnd.apple.mpegurl'
+    if filename is not None:
+        response.headers['Content-Disposition'] = 'attachment'
+    else:
+        response.headers['Content-Disposition'] = 'attachment; filename=stream.m3u8'
+    return response
 
 
 if __name__ == '__main__':
