@@ -8,6 +8,9 @@ from flask import Flask, make_response, render_template
 # import the funimation file
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import funimation as f
+from subprocess import check_output
+
+version = check_output(['git', 'rev-parse', '--short', 'HEAD'])
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -16,6 +19,11 @@ shows = f.get_shows()
 
 s = requests.session()
 s.headers = {'User-Agent: FAPI Web'}
+
+
+@app.context_processor
+def set_version():
+    return {'version': version}
 
 
 @app.route('/')

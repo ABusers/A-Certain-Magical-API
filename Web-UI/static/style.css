@@ -57,3 +57,7 @@ a:hover {
     flex-wrap: wrap;
     justify-content: center;
 }
+#footer {
+    margin-top: 0.8em;
+    font-size: 75%;
+}
