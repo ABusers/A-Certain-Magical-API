@@ -10,6 +10,9 @@
                     <div class="episode_number">Episode {{eps[i].episode_number}}</div>
                     <div class="episode_title">{{eps[i].title}}</div>
                 </a>
+                <div class="episode_title">
+                    <a href="{{ cdnurl(eps[i].funimation_id, eps[i].quality)}}"><h4>alt</h4></a>
+                </div>
             </div>
         {% endfor %}
     </div>

@@ -30,7 +30,7 @@ def show(n, subdub):
     nid = shows[n].nid
     eps = [x for x in f.get_videos(int(nid)) if x.sub_dub.lower() == subdub]  # Hacky, needs architecture fix
     title = shows[n].label
-    return render_template('episodes.html', eps=eps, title=title, n=n, subdub=subdub)
+    return render_template('episodes.html', eps=eps, title=title, n=n, subdub=subdub, cdnurl=f.stream_url)
 
 
 @app.route('/show/<int:n>/<subdub>/<int:episode_number>/<int:quality>/play')
