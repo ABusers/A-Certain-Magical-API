@@ -8,7 +8,7 @@ import requests_cache
 from urllib import urlencode
 
 expire_after = datetime.timedelta(days=1)
-cache = requests_cache.core.install_cache('cache',expire_after=expire_after)
+cache = requests_cache.core.install_cache('../cache',expire_after=expire_after)
 __all__ = ['HTTPClient']
 
 
