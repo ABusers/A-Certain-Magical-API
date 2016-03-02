@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from urllib2 import HTTPError
 from .httpclient import HTTPClient
 from .models import Video, Show
 
