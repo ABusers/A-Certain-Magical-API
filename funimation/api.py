@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from urllib2 import HTTPError
-import requests
 from .httpclient import HTTPClient
 from .models import Video, Show
 
@@ -31,11 +30,10 @@ class Funimation(object):
     def get_videos(self, show_id, limit=3000, offset=0):
         query = self._build_query(locals())
         request = self._request('feeds/ps/videos', query)
-        i = 0
-        for n in request:
-            url_mod = n.video_url.split('?')
-            request[i].video_url = url_mod[0]+'?9b303b6c62204a9dcb5ce5f5c607'
-            i =+ 1
+        for req in request:
+            # Replace get params with the mobile one
+            # This lets any IP (not only server IP) access content
+            req.video_url = req.video_url.split('?')[0]+'?9b303b6c62204a9dcb5ce5f5c607'
         return request
 
     def get_featured(self, limit=3000, offset=0):

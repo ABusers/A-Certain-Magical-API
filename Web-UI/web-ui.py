@@ -21,7 +21,7 @@ app.config.from_object('config')
 shows = f.get_shows()
 
 s = requests.session()
-s.headers = {'User-Agent: FAPI Web'}
+s.headers = {'User-Agent': 'Sony-PS3'}
 
 
 @app.context_processor
@@ -58,7 +58,7 @@ def play_episode(asset_id, episode_id, filename):
             episode = ep
             break
 
-    playlist_url = episode.video_url  # , episode.quality)
+    playlist_url = episode.video_url
 
     response = make_response("#EXTM3U\n"+playlist_url)
     response.headers['Content-Type'] = 'application/vnd.apple.mpegurl'
