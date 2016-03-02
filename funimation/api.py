@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-import logging
 from urllib2 import HTTPError
-
+import requests
 from .httpclient import HTTPClient
 from .models import Video, Show
-
 
 
 __all__ = ['Funimation']
@@ -14,7 +12,7 @@ class Funimation(object):
 
     def __init__(self, username=None, password=None, cookiefile=None):
         super(Funimation, self).__init__()
-        self.http = HTTPClient('http://www.funimation.com/', cookiefile,
+        self.http = HTTPClient('http://www.funimation.com/',
                                [('User-Agent', 'Sony-PS3')])
         # defaults to the free account user
         # hmm... the API doesn't appear to validate the users subscription
@@ -130,7 +128,6 @@ class Funimation(object):
                 new_res['episodes'] = [Video(**v) for v in
                                        res['episodes']['videos']]
             new_res['shows'] = [Show(**s) for s in res['shows']]
-            self._log.debug(new_res)
             return new_res
 
     def _build_query(self, params):

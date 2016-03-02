@@ -2,36 +2,21 @@
 import os
 import json
 import urllib2
-import cookielib
+import requests
+import datetime
+import requests_cache
 from urllib import urlencode
 
+expire_after = datetime.timedelta(days=1)
+cache = requests_cache.core.install_cache('cache',expire_after=expire_after)
 __all__ = ['HTTPClient']
 
 
 class HTTPClient(object):
 
-    def __init__(self, base_url='', cookiefile=None, headers=None):
+    def __init__(self, base_url='', headers=None):
         super(HTTPClient, self).__init__()
         self.base_url = base_url
-        self.cookiefile = cookiefile
-        self._cookiejar = cookielib.LWPCookieJar(self.cookiefile)
-
-        try:
-            if self.cookiefile is not None:
-                # make sure the cookie files directory exists
-                if not os.path.exists(os.path.dirname(self.cookiefile)):
-                    os.makedirs(os.path.dirname(self.cookiefile))
-                else:
-                    self._cookiejar.load()
-        except IOError:
-            # files doesn't exist yet. this is normal if the cookie was
-            # cleared or it's the first time running.
-            print 'cookie error'
-        cookie_handler = urllib2.HTTPCookieProcessor(self._cookiejar)
-        self.opener = urllib2.build_opener(cookie_handler)
-
-        if headers is not None:
-            self.opener.addheaders = headers
 
     def get(self, url, query=None):
         if query is not None:
@@ -45,25 +30,8 @@ class HTTPClient(object):
     def post(self, url, data):
         return self._request(self._build_request(url, data))
 
-    def get_cookie(self, name):
-        for x in self._cookiejar:
-            if x.name == name:
-                return x
-        return None
-
-    def save_cookies(self):
-        self._cookiejar.save()
-
     def _request(self, request):
-        content = self.opener.open(request)
-        if self.cookiefile:
-            self.save_cookies()
-
-        if content.info()['content-type'] == 'application/json':
-            content = json.load(content, 'utf-8')
-        else:
-            content = content.read()
-
+        content = request.json()
         return content
 
     def _build_request(self, url, data=None):
@@ -72,9 +40,9 @@ class HTTPClient(object):
         if data is not None:
             if isinstance(data, dict):
                 req = urllib2.Request(url, json.dumps(data),
-                                      {'Content-Type': 'application/json'})
+                                      headers={'Content-Type': 'application/json'})
             else:
                 req = urllib2.Request(url, data)
         else:
-            req = urllib2.Request(url)
+            req = requests.get(url)
         return req

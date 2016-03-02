@@ -5,3 +5,4 @@ __pycache__
 .idea/
 config/
 Web-UI/config.py
+cache.sqlite
