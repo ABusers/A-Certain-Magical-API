@@ -49,7 +49,7 @@ for i in openwith:
 def showpicker():
     slist = [{'title': 'Opener'}]
     for i in f.get_shows():
-        slist += [{'title': i.series_name, 'asset_id': i.asset_id, 'content_types': i.video_section}]
+        slist += [{'title': i.series_name, 'asset_id': i.asset_id}]
     return slist
 
 
