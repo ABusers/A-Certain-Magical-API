@@ -191,11 +191,7 @@ class Video(Structure):
             path = path_split[0] + str(rate) + path_split[-1]
             # recreate the URL
             url = '%s://%s%s?%s' % (url.scheme, url.netloc, path, url.query)
-            url = url.split('?')[0]
-            url = url+'?9b303b6c62204a9dcb5ce5f5c607'
             return url
         except:
             url = self.video_url
-            url.split('?')
-            url = url[0]+'?9b303b6c62204a9dcb5ce5f5c607'
             return url

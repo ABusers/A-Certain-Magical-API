@@ -34,6 +34,9 @@ class Funimation(object):
             # Replace get params with the mobile one
             # This lets any IP (not only server IP) access content
             req.video_url = req.video_url.split('?')[0]+'?9b303b6c62204a9dcb5ce5f5c607'
+            video_split = req.video_url.split(',')
+            split_len = len(video_split)
+            req.video_url = video_split[0]+video_split[split_len-2]+video_split[split_len-1]
         return request
 
     def get_featured(self, limit=3000, offset=0):
