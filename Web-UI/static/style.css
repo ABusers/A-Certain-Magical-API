@@ -51,7 +51,7 @@ a:hover {
 }
 #flexwrap {
     margin: auto;
-    max-width: 100%;
+    max-width: 950PX;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
