@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from urllib2 import HTTPError
 from .httpclient import HTTPClient
 from .models import Video, Show
 
@@ -9,7 +8,7 @@ __all__ = ['Funimation']
 
 class Funimation(object):
 
-    def __init__(self, username=None, password=None, cookiefile=None):
+    def __init__(self):
         super(Funimation, self).__init__()
         self.http = HTTPClient('http://www.funimation.com/',
                                [('User-Agent', 'Sony-PS3')])
@@ -20,7 +19,6 @@ class Funimation(object):
         # FunimationSubscriptionUser = paid account
         # FunimationUser = free account
         self.user_type = 'FunimationSubscriptionUser'
-        self.logged_in = self.login(username, password)
 
     def get_shows(self, limit=3000, offset=0, sort=None, first_letter=None,
                   filter=None):
@@ -73,45 +71,6 @@ class Funimation(object):
                 shows.append(show)
         return shows
 
-    def login(self, username, password):
-        # This is complicated because we want to know if the username has
-        # changed without having the login every time the plugin is ran.
-        # Unfortunately we wont know if the users subscription status has
-        # changed since we are reusing the cookie from previous requests.
-        if not username and not password:
-            return False
-        # Cookie will be done if it doesn't exist or it has expired.
-        cookie = self.http.get_cookie('ci_session')
-        # Get cookie, if it exists and cookie has a comment
-        if cookie is not None and cookie.comment is not None:
-            try:
-                # comment on the cookie has the username and user type.
-                uname, self.user_type = cookie.comment.split('|')
-                # The current username and the username in the comment haven't
-                # changed then we have nothing left to do.
-                if uname == username:
-                    return True
-            except ValueError:
-                # Happens when the comment isn't formatted correctly.
-                pass
-
-        payload = {'username': username, 'password': password,
-                   'playstation_id': ''}
-        try:
-            resp = self.http.post(
-                'https://www.funimation.com/feeds/ps/login.json?v=2', payload)
-            utype = resp.get('user_type')
-            if utype is not None:
-                # Convert snake case to camel case.
-                self.user_type = ''.join([x.title() for x in utype.split('_')])
-            # Add the username and user type to the cookie comment for later.
-            self.http.get_cookie('ci_session').comment = '%s|%s' % (
-                username, self.user_type)
-            self.http.save_cookies()
-            return True
-        except HTTPError:
-            # throws a 400 error when login is wrong
-            return False
 
     def _request(self, uri, query):
         res = self.http.get(uri, query)
