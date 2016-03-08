@@ -3,6 +3,7 @@
 import os
 import sys
 import requests
+import jinja2
 from flask import Flask, make_response, render_template
 # import the funimation file
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -14,6 +15,17 @@ if sys.platform not in {'iphoneos', 'win32'}:
     version = check_output(['git', 'rev-parse', '--short', 'HEAD'])
 else:
     version = 'Unavailable'
+
+def process_image(url):
+    file_name = url.split('/')[-1]
+    if not os.path.exists('static/img_cache'):
+        os.mkdir('static/img_cache')
+    if not os.path.exists('static/img_cache/'+file_name):
+        req = requests.get(url)
+        image = open('static/img_cache/'+file_name,'w+b')
+        image.write(req.content)
+        image.close()
+    return file_name
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -31,7 +43,7 @@ def set_version():
 
 @app.route('/')
 def index():
-    return render_template('shows.html', shows=shows)
+    return render_template('shows.html', shows=shows, p=process_image)
 
 
 @app.route('/show/<int:asset_id>/<subdub>')
@@ -43,7 +55,7 @@ def show(asset_id, subdub):
         eps = [x for x in f.get_videos(int(asset_id)) if x.dub_sub.lower() == subdub]  # Hacky, needs architecture fix
     except AttributeError:  # FIXME: This is not the correct way to do this.
         return render_template('message.html', message="API Error: Does this show have any episodes?")
-    return render_template('episodes.html', title=show_title, eps=eps, show_id=asset_id, subdub=subdub)
+    return render_template('episodes.html', title=show_title, eps=eps, show_id=asset_id, subdub=subdub, p=process_image)
 
 
 @app.route('/show/<int:asset_id>/<int:episode_id>/play', defaults={'filename': None})

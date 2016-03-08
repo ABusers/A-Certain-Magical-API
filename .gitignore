@@ -6,4 +6,4 @@ __pycache__
 config/
 Web-UI/config.py
 cache.sqlite
-*/img_cache/
+Web-UI/static/img_cache/

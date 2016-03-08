@@ -6,7 +6,7 @@
         {% for i in range(0, eps|length) %}
             <div class="episode">
                 <a href="{{ url_for('play_episode',asset_id=show_id,episode_id=eps[i].asset_id) }}">
-                    <img class="thumbnail" src="{{ eps[i].thumbnail }}">
+                    <img class="thumbnail" src="{{ url_for('static',filename='img_cache/'+p(eps[i].thumbnail)) }}">
                     <div class="episode_number">Episode {{ eps[i].info['episode'] }}</div>
                     <div class="episode_title">{{ eps[i].title }}</div>
                 </a>
