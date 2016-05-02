@@ -19,18 +19,15 @@ def dumps(dictionary):
 config_file = '../config/ios-settings.json'
 if os.path.exists(config_file):
     try:
-        config_ios = open(config_file, 'r')
-        jsonstr = json.load(config_ios)
-        opener = jsonstr['opener']
+        with open(config_file, 'r') as f:
+            opener = json.load(f)['opener']
     except:
-        config_ios = open(config_file, 'w')
-        config_ios.write(dumps({'opener': 'Safari'}))
-        config_ios.close()
+        with open(config_file, 'w') as f:
+            f.write(dumps({'opener': 'Safari'}))
         opener = 'Safari'
 else:
-    config = open(config_file, 'w')
-    config.write(dumps({'opener': 'Safari'}))
-    config.close()
+    with open(config_file, 'w') as f:
+        f.write(dumps({'opener': 'Safari'}))
     opener = 'Safari'
 
 openwith = [
@@ -56,9 +53,8 @@ def showpicker():
 def videos_list(item_list):
     vlist = []
     for parts in item_list:
-        item_url = parts.video_url
-        ep_num = str(parts.info['episode'])
-        vlist += [{'title': ep_num + ' : ' + parts.title + '-' + parts.dub_sub, 'url': item_url}]
+        title = '{} : {}-{}'.format(parts.info['episode'], parts.title, parts.dub_sub)
+        vlist += [{'title': title, 'url': parts.video_url}]
     return vlist
 
 
@@ -67,9 +63,8 @@ if choice is None:
     sys.exit('Quit')
 if choice['title'] is 'Opener':
     choice = dialogs.list_dialog('Open With', openwith)
-    config_ios = open('ios-settings.json', 'w')
-    config_ios.write(dumps({'opener': choice['title']}))
-    config_ios.close()
+    with open('ios-settings.json', 'w') as f:
+        f.write(dumps({'opener': choice['title']}))
     sys.exit('Settings changed')
 vtable = f.get_videos(choice['asset_id'])
 videos = videos_list(vtable)
