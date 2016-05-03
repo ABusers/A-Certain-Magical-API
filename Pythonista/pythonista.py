@@ -30,18 +30,11 @@ else:
         f.write(dumps({'opener': 'Safari'}))
     opener = 'Safari'
 
-openwith = [
-    {'urlscheme': 'safari-http://', 'title': 'Safari'},
-    {'urlscheme': 'nplayer-http://', 'title': 'nPlayer'},
-    {'urlscheme': 'http://', 'title': 'Pythonista'},
-    {'urlscheme': 'googlechrome://', 'title': 'Chrome'},
-    {'urlscheme': 'clipboard', 'title': 'Clipboard'}]
-
-for i in openwith:
-    if opener == i['title']:
-        urlscheme = i['urlscheme']
-        break
-
+url_scheme = {'Safari': 'safari-http://',
+              'nPlayer': 'nplayer-http://',
+              'Pythonista': 'http://',
+              'Chrome': 'googlechrome://',
+              'Clipboard': 'clipboard'}.get(opener, 'http://')
 
 def showpicker():
     slist = [{'title': 'Opener'}]
