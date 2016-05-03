@@ -53,8 +53,8 @@ def videos_list(item_list):
 choice = dialogs.list_dialog('shows', showpicker()) or sys.exit('Quit')
 if choice['title'] is 'Opener':
     choice = dialogs.list_dialog('Open With', openwith)
-    with open('ios-settings.json', 'w') as f:
-        f.write(dumps({'opener': choice['title']}))
+    with open('ios-settings.json', 'w') as out_file:
+        out_file.write(dumps({'opener': choice['title']}))
     sys.exit('Settings changed')
 vtable = f.get_videos(choice['asset_id'])
 videos = videos_list(vtable)
