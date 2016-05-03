@@ -38,7 +38,7 @@ url_scheme = {'Safari': 'safari-http://',
 
 def showpicker():
     return [{'title': 'Opener'}] + [{'title': show.series_name,
-             'asset_id': show.asset_id} for show in f.get_shows()
+             'asset_id': show.asset_id} for show in f.get_shows()]
 
 
 def videos_list(item_list):
