@@ -30,11 +30,15 @@ else:
         out_file.write(dumps({'opener': 'Safari'}))
     opener = 'Safari'
 
-url_scheme = {'Safari': 'safari-http://',
-              'nPlayer': 'nplayer-http://',
-              'Pythonista': 'http://',
-              'Chrome': 'googlechrome://',
-              'Clipboard': 'clipboard'}.get(opener, 'http://')
+url_dict = {'Safari': 'safari-http://',
+            'nPlayer': 'nplayer-http://',
+            'Pythonista': 'http://',
+            'Chrome': 'googlechrome://',
+            'Clipboard': 'clipboard'}
+url_scheme = url_dict.get(opener, 'http://')
+openwith = [{'urlscheme': value, 'title': key}
+           for key, value in url_dict.items()]
+
 
 def showpicker():
     return [{'title': 'Opener'}] + [{'title': show.series_name,
