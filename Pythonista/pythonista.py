@@ -36,8 +36,7 @@ url_dict = {'Safari': 'safari-http://',
             'Chrome': 'googlechrome://',
             'Clipboard': 'clipboard'}
 url_scheme = url_dict.get(opener, 'http://')
-openwith = [{'urlscheme': value, 'title': key}
-           for key, value in url_dict.items()]
+openwith = [{'urlscheme': value, 'title': key} for key, value in url_dict.items()]
 
 
 def showpicker():
