@@ -19,15 +19,15 @@ def dumps(dictionary):
 config_file = '../config/ios-settings.json'
 if os.path.exists(config_file):
     try:
-        with open(config_file, 'r') as f:
-            opener = json.load(f)['opener']
+        with open(config_file, 'r') as in_file:
+            opener = json.load(in_file)['opener']
     except:
-        with open(config_file, 'w') as f:
-            f.write(dumps({'opener': 'Safari'}))
+        with open(config_file, 'w') as out_file:
+            out_file.write(dumps({'opener': 'Safari'}))
         opener = 'Safari'
 else:
-    with open(config_file, 'w') as f:
-        f.write(dumps({'opener': 'Safari'}))
+    with open(config_file, 'w') as out_file:
+        out_file.write(dumps({'opener': 'Safari'}))
     opener = 'Safari'
 
 url_scheme = {'Safari': 'safari-http://',
@@ -37,23 +37,16 @@ url_scheme = {'Safari': 'safari-http://',
               'Clipboard': 'clipboard'}.get(opener, 'http://')
 
 def showpicker():
-    slist = [{'title': 'Opener'}]
-    for i in f.get_shows():
-        slist += [{'title': i.series_name, 'asset_id': i.asset_id}]
-    return slist
+    return [{'title': 'Opener'}] + [{'title': show.series_name,
+             'asset_id': show.asset_id} for show in f.get_shows()
 
 
 def videos_list(item_list):
-    vlist = []
-    for parts in item_list:
-        title = '{} : {}-{}'.format(parts.info['episode'], parts.title, parts.dub_sub)
-        vlist += [{'title': title, 'url': parts.video_url}]
-    return vlist
+    return [{'title': '{} : {}-{}'.format(parts.info['episode'], parts.title,
+              parts.dub_sub), 'url': parts.video_url} for parts in item_list]
 
 
-choice = dialogs.list_dialog('shows', showpicker())
-if choice is None:
-    sys.exit('Quit')
+choice = dialogs.list_dialog('shows', showpicker()) or sys.exit('Quit')
 if choice['title'] is 'Opener':
     choice = dialogs.list_dialog('Open With', openwith)
     with open('ios-settings.json', 'w') as f:
@@ -61,9 +54,7 @@ if choice['title'] is 'Opener':
     sys.exit('Settings changed')
 vtable = f.get_videos(choice['asset_id'])
 videos = videos_list(vtable)
-item = dialogs.list_dialog(choice['title'], videos)
-if item is None:
-    sys.exit('Quit')
+item = dialogs.list_dialog(choice['title'], videos) or sys.exit('Quit')
 url = urlparse.urlparse(item['url'])
 if urlscheme is 'clipboard':
     clipboard.set(item['url'])
