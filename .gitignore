@@ -7,3 +7,4 @@ config/
 Web-UI/config.py
 cache.sqlite
 Web-UI/static/img_cache/
+*.ipynb
